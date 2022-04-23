@@ -1,0 +1,25 @@
+to use pin as digital io:
+
+GPIO_DIO_vidPinInit(u8PortNumberCpy,u8PinNumberCpy);
+GPIO_vidSetPinDirection(u8PortNumberCpy, u8PinNumberCpy, u8DirectionCpy);
+
+***********************************************************
+
+to use port as digital io:
+
+GPIO_DIO_vidPortInit(u8PortNumberCpy);
+GPIO_vidSetPortDirection(uint8_t u8PortNumberCpy, uint8_t u8ValueCpy);
+
+***********************************************************
+
+to set output digital signal
+
+for  pin:		GPIO_vidSetPinValue(u8PortNumberCpy, u8PinNumberCpy, u8ValueCpy);
+for  port:	GPIO_vidSetPortValue(u8PortNumberCpy, u8ValueCpy);
+
+***********************************************************
+
+to read input digital signal:
+
+for  port:	GPIO_u8GetPortValue(u8PortNumberCpy);
+for  pin:		GPIO_u8GetPinValue(u8PortNumberCpy,u8PinNumberCpy);
