@@ -5,29 +5,38 @@
 
 
 void LCD_vidSendCommand(unsigned char command) {
-	// If the command is ClearScreen or ResetCursor it will take 1.64ms to apply the command so,
-	// a delay of 2ms should be applied.
-	uint8_t DelayToApplyCommand;
-	if (command == 0x01 || command == 0x02)
-		DelayToApplyCommand = 2;
-	else 
-		DelayToApplyCommand = 1;
-
-	// Select to write on command register
+	// Select to write on command register [RS = 1] 
+	// According to datasheet time digram a delay of 40ns should be applied before set E = 1.
 	GPIO_vidSetPinValue(GPIO_PORTB, 0, High);
+	systic_vid1MicroDelay();
 
-	// The next step is to apply the command bits to data bits D0->D7 that connected to port-D
+	// Apply the command bits to data bits D0->D7 of the LCD that connected to port-D
+	// According to datasheet time digram a delay of 80ns should be applied before the falling edge of E.
 	GPIO_vidSetPortValue(GPIO_PORTD, command);
+	systic_vid1MicroDelay()
 
-	// Then enable write on LCD command register
+	// Create falling edge for the write operation to start
+	// According to datasheet time digram the pulse width must be greater than 230ns
+	// [E] --> Low to High
 	GPIO_vidSetPinValue(GPIO_PORTB, 2, High);
-	// Delay to apply command
-	systic_vidDelay(DelayToApplyCommand);
-	// Disable the write on LCD command register
+	systic_vid1MicroDelay();
+	// [E] --> High to Low
 	GPIO_vidSetPinValue(GPIO_PORTB, 2, Low);
+	systic_vid1MicroDelay();
+
+	// If the command is ClearScreen or ResetCursor it will take 1.64ms to apply the command so,
+	// a delay of 2ms should be applied, and for any other command it will take 40 microsecond.
+	if (command == ClearScreen || command == ResetCursor)
+		systic_vidDelay(2);
+	else
+		systic_vid1msDelay();
 }
 
 void LCD_vidScreenInit(void) {
+
+	// Delay 15ms for the LCD to work properly [Datasheet instruction]
+	systic_vidDelay(15);
+
 	// Setup tiva pins
 	// 1. use port-D for 8-bit data.
 	GPIO_DIO_vidPortInit(GPIO_PORTD);
@@ -43,18 +52,12 @@ void LCD_vidScreenInit(void) {
 	GPIO_vidSetPinDirection(GPIO_PORTB, 2, High);
 
 
-	// Setup the LCD according to the datasheet
-	systic_vidDelay(15);
-	LCD_vidSendCommand(Set_8bit_5x7_1Line);
-	systic_vidDelay(5);
-	LCD_vidSendCommand(Set_8bit_5x7_1Line);
-	systic_vidDelay(1);
-	LCD_vidSendCommand(Set_8bit_5x7_1Line);
-	// Additional commands (custom initialization)
+	// Setup the LCD.
+	LCD_vidSendCommand(Set_8bit_5x7_2Line);
 	LCD_vidSendCommand(ClearScreen);
-	LCD_vidSendCommand(SetDisplayOnCursorOnBlinking);
 	LCD_vidSendCommand(SetCursorGoRight);
-	LCD_vidSendCommand(Set_8bit_5x7_1Line);
+	LCD_vidSendCommand(SetDisplayOnCursorOnBlinking);
+
 }
 
 void LCD_vidClearScreen(void) {
