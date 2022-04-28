@@ -5,5 +5,6 @@
 
 void systic_vidInit(void);
 void systic_vid1msDelay();
+void systic_vid1MicroDelay();
 void systic_vidDelay(unsigned int ms);
 #endif
