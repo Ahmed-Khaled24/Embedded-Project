@@ -65,7 +65,7 @@ void LCD_vidClearScreen(void) {
 	LCD_vidSendCommand(ClearScreen);
 }
 
-void void LCD_vidWriteChar(unsigned char c) { 
+void void LCD_vidWriteChar(char c) { 
 	//set RS for data registers (Read/write) and wait for delay
 	GPIO_vidSetPinValue(PORTB, 0, High);
 	systic_vid1MicroDelay();
@@ -85,10 +85,11 @@ void void LCD_vidWriteChar(unsigned char c) {
 
 
 }
-void LCD_vidWriteString(string string, unsigned int stringSize) {
+void LCD_vidWriteString(char* string, unsigned int stringSize) {
 
 	for (int i = 0; i < stringSize; i++) {
-		LCD_vidWriteChar(string[0]);
+		
+		LCD_vidWriteChar(string[i]);
 	}
 }
 
