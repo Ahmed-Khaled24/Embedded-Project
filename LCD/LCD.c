@@ -86,5 +86,11 @@ void void LCD_vidWriteChar(unsigned char c) {
 	LCD_vidSendCommand(SetCursorGoRight);
 
 }
+void LCD_vidWriteString(string string, unsigned int stringSize) {
+
+	for (int i = 0; i < stringSize; i++) {
+		LCD_vidWriteChar(string[0]);
+	}
+}
 
 
