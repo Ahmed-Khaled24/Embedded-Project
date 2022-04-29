@@ -32,6 +32,7 @@
 #define ShiftCursorRight                        0x14            // Shift cursor one position right.
 #define ShiftDisplayLeft                        0x18            // Shift display one position left.
 #define ShiftDisplayRight                       0x1C            // Shift display one position right.
+#define GoToSecondLine                          0xC0            // Go to the second line.
 
 //------------------------------ FUNCTION SET [Delay: 40 micro second] ------------------------------------------------------------------------
 
