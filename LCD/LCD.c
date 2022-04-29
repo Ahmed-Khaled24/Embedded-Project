@@ -88,7 +88,7 @@ void void LCD_vidWriteChar(char c) {
 void LCD_vidWriteString(char* string, unsigned int stringSize) {
 
 	for (int i = 0; i < stringSize; i++) {
-		
+		if (i == 16) LCD_vidSendCommand(GoToSecondLine);
 		LCD_vidWriteChar(string[i]);
 	}
 }
