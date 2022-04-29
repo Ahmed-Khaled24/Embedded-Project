@@ -83,7 +83,6 @@ void void LCD_vidWriteChar(unsigned char c) {
 	GPIO_vidSetPinValue(GPIO_PORTB, 2, Low);
 	systic_vid1MicroDelay();
 
-	LCD_vidSendCommand(SetCursorGoRight);
 
 }
 void LCD_vidWriteString(string string, unsigned int stringSize) {
