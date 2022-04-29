@@ -15,10 +15,10 @@ void LCD_vidScreenInit(void);
 void LCD_vidClearScreen(void);
 
 // Write a character on the LCD
-void LCD_vidWriteChar(unsigned char c);
+void LCD_vidWriteChar(char c);
 
 // Write a string on the LCD
-void LCD_vidWriteString(unsigned char * string, unsigned int stringSize);
+void LCD_vidWriteString(char* string, unsigned int stringSize);
 
 
 
