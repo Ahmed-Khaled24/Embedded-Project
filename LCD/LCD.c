@@ -5,9 +5,9 @@
 
 
 void LCD_vidSendCommand(unsigned char command) {
-	// Select to write on command register [RS = 1] 
+	// Select to write on command register [RS = 0] 
 	// According to datasheet time digram a delay of 40ns should be applied before set E = 1.
-	GPIO_vidSetPinValue(GPIO_PORTB, 0, High);
+	GPIO_vidSetPinValue(GPIO_PORTB, 0, Low);
 	systic_vid1MicroDelay();
 
 	// Apply the command bits to data bits D0->D7 of the LCD that connected to port-D
@@ -50,6 +50,7 @@ void LCD_vidScreenInit(void) {
 	GPIO_vidSetPinDirection(GPIO_PORTB, 0, High);
 	GPIO_vidSetPinDirection(GPIO_PORTB, 1, High);
 	GPIO_vidSetPinDirection(GPIO_PORTB, 2, High);
+	GPIO_vidSetPinValue(GPIO_PORTB, 1, Low);
 
 
 	// Setup the LCD.
