@@ -1,4 +1,4 @@
-## LDC driver
+## LCD driver
 
 - SendCommand(char command)
 - Lcd_init(void)
