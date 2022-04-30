@@ -4,10 +4,15 @@
 #include<../Systick/Systick.h>
 
 
+// Define RS as PB0 and E as PB1
+#define RS 0
+#define E  1
+
+
 void LCD_vidSendCommand(unsigned char command) {
 	// Select to write on command register [RS = 0] 
 	// According to datasheet time digram a delay of 40ns should be applied before set E = 1.
-	GPIO_vidSetPinValue(GPIO_PORTB, 0, Low);
+	GPIO_vidSetPinValue(GPIO_PORTB, RS, Low);
 	systic_vid1MicroDelay();
 
 	// Apply the command bits to data bits D0->D7 of the LCD that connected to port-D
@@ -18,10 +23,10 @@ void LCD_vidSendCommand(unsigned char command) {
 	// Create falling edge for the write operation to start
 	// According to datasheet time digram the pulse width must be greater than 230ns
 	// [E] --> Low to High
-	GPIO_vidSetPinValue(GPIO_PORTB, 2, High);
+	GPIO_vidSetPinValue(GPIO_PORTB, E, High);
 	systic_vid1MicroDelay();
 	// [E] --> High to Low
-	GPIO_vidSetPinValue(GPIO_PORTB, 2, Low);
+	GPIO_vidSetPinValue(GPIO_PORTB, E, Low);
 	systic_vid1MicroDelay();
 
 	// If the command is ClearScreen or ResetCursor it will take 1.64ms to apply the command so,
@@ -42,15 +47,12 @@ void LCD_vidScreenInit(void) {
 	GPIO_DIO_vidPortInit(GPIO_PORTD);
 	GPIO_vidSetPortDirection(GPIO_PORTD, 0xFF);
 
-	// 2. use pins B0, B1, and B2 
-	//             RS, RW, and E
-	GPIO_DIO_vidPinInit(GPIO_PORTB, 0);
-	GPIO_DIO_vidPinInit(GPIO_PORTB, 1);
-	GPIO_DIO_vidPinInit(GPIO_PORTB, 2);
-	GPIO_vidSetPinDirection(GPIO_PORTB, 0, High);
-	GPIO_vidSetPinDirection(GPIO_PORTB, 1, High);
-	GPIO_vidSetPinDirection(GPIO_PORTB, 2, High);
-	GPIO_vidSetPinValue(GPIO_PORTB, 1, Low);
+	// 2. use pins B0, B1 
+	//             RS, E
+	GPIO_DIO_vidPinInit(GPIO_PORTB, RS);
+	GPIO_DIO_vidPinInit(GPIO_PORTB, E);
+	GPIO_vidSetPinDirection(GPIO_PORTB, RS, High);
+	GPIO_vidSetPinDirection(GPIO_PORTB, E, High);
 
 
 	// Setup the LCD.
@@ -67,7 +69,7 @@ void LCD_vidClearScreen(void) {
 
 void void LCD_vidWriteChar(char c) { 
 	//set RS for data registers (Read/write) and wait for delay
-	GPIO_vidSetPinValue(PORTB, 0, High);
+	GPIO_vidSetPinValue(PORTB, RS, High);
 	systic_vid1MicroDelay();
 
 	//add character bits inputted in the pins D0 -> D7 and wait for delay
@@ -77,10 +79,10 @@ void void LCD_vidWriteChar(char c) {
 	// Create falling edge for the write operation to start
     // According to datasheet time digram the pulse width must be greater than 230ns
     // [E] --> Low to High
-	GPIO_vidSetPinValue(GPIO_PORTB, 2, High);
+	GPIO_vidSetPinValue(GPIO_PORTB, E, High);
 	systic_vid1MicroDelay();
 	// [E] --> High to Low
-	GPIO_vidSetPinValue(GPIO_PORTB, 2, Low);
+	GPIO_vidSetPinValue(GPIO_PORTB, E, Low);
 	systic_vid1MicroDelay();
 
 
