@@ -21,5 +21,5 @@ void (*current_program)()  ;
 uint8_t Oven_Ready();
 void Turn_on_LEDs();
 void Turn_off_LEDs();
-void SoundBuzzer(double frequency);
+void tuneBuzzer(uint8_t u8PortNumberCpy , uint8_t u8PinNumberCpy,uint32_t u32FreqCpy_Hz, uint32_t u32TimeCpy_ms);
 #endif // PROGRAMS_H_INCLUDED
