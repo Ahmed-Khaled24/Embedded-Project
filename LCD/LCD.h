@@ -20,6 +20,9 @@ void LCD_vidWriteChar(char c);
 // Write a string on the LCD
 void LCD_vidWriteString(char* string, unsigned int stringSize);
 
+// Countdown timer 
+void LCD_vidCountDown(unsigned int timer);
+ 
 
 
 #endif

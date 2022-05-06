@@ -93,6 +93,35 @@ void LCD_vidWriteString(char* string, unsigned int stringSize) {
 		if (i == 16) LCD_vidSendCommand(GoToSecondLine);
 		LCD_vidWriteChar(string[i]);
 	}
+
+
+}
+
+void LCD_vidCountDown(unsigned int timer) {
+	unsigned int min = timer / 100, sec = timer % 100;
+	char string1[20], string2[20];
+	itoa(min, string1, 10);
+	itoa(sec, string2, 10);
+	while (atoi(string1) >= 0) {
+		while (atoi(string2) >= 1) {
+			itoa(min, string1, 10);
+			LCD_vidWriteString(string1, strlen(string1));
+
+			LCD_vidWriteChar(':');
+			itoa(sec, string2, 10);
+			LCD_vidWriteString(string2, strlen(string2));
+			delay(1000);
+			LCD_vidSendCommand(ClearScreen);
+			sec--;
+		}
+
+		sec = 59;
+		min--;
+		itoa(min, string1, 10);
+		itoa(sec, string2, 10);
+
+	}
+
 }
 
 
