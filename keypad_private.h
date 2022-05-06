@@ -16,7 +16,7 @@
 #define KEYPAD_u8EXTERNAL	1 
 
 
-static u8 KeyPad_u8CheckRow(u8 CopyNumber); 
+static uint8_t KeyPad_u8CheckRow(uint8_t COL) ;
 
 
 
