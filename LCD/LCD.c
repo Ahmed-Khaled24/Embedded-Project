@@ -1,7 +1,7 @@
-#include<LCD.h>
-#include<LCD-Commands.h>
-#include<../GPIO/GPIO_driver.h>
-#include<../Systick/Systick.h>
+#include "LCD.h"
+#include "LCD-Commands.h"
+#include "GPIO_driver.h"
+#include "Systick.h"
 
 
 // Define RS as PB0 and E as PB1
@@ -10,7 +10,7 @@
 
 
 void LCD_vidSendCommand(unsigned char command) {
-	// Select to write on command register [RS = 0] 
+	// Select to write on command register [RS = 0]
 	// According to datasheet time digram a delay of 40ns should be applied before set E = 1.
 	GPIO_vidSetPinValue(GPIO_PORTB, RS, Low);
 	systic_vid1MicroDelay();
@@ -18,7 +18,7 @@ void LCD_vidSendCommand(unsigned char command) {
 	// Apply the command bits to data bits D0->D7 of the LCD that connected to port-D
 	// According to datasheet time digram a delay of 80ns should be applied before the falling edge of E.
 	GPIO_vidSetPortValue(GPIO_PORTD, command);
-	systic_vid1MicroDelay()
+	systic_vid1MicroDelay() ;
 
 	// Create falling edge for the write operation to start
 	// According to datasheet time digram the pulse width must be greater than 230ns
@@ -47,7 +47,7 @@ void LCD_vidScreenInit(void) {
 	GPIO_DIO_vidPortInit(GPIO_PORTD);
 	GPIO_vidSetPortDirection(GPIO_PORTD, 0xFF);
 
-	// 2. use pins B0, B1 
+	// 2. use pins B0, B1
 	//             RS, E
 	GPIO_DIO_vidPinInit(GPIO_PORTB, RS);
 	GPIO_DIO_vidPinInit(GPIO_PORTB, E);
@@ -67,13 +67,13 @@ void LCD_vidClearScreen(void) {
 	LCD_vidSendCommand(ClearScreen);
 }
 
-void void LCD_vidWriteChar(char c) { 
+void LCD_vidWriteChar(char c) {
 	//set RS for data registers (Read/write) and wait for delay
-	GPIO_vidSetPinValue(PORTB, RS, High);
+	GPIO_vidSetPinValue(GPIO_PORTB, RS, High);
 	systic_vid1MicroDelay();
 
 	//add character bits inputted in the pins D0 -> D7 and wait for delay
-	GPIO_vidSetPortValue(PORTD, c);
+	GPIO_vidSetPortValue(GPIO_PORTD, c);
 	systic_vid1MicroDelay();
 
 	// Create falling edge for the write operation to start
