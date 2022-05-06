@@ -78,8 +78,7 @@ void Program_Finish()
     for(i = 0 ; i < 3 ; i++ )
         {
             GPIO_PORTF_DATA_R ^= 0xE ; //make the LEDS blink
-            SoundBuzzer(2500);
-            systic_vidDelay(1000); //wait for 1 second between blinking periods
+            tuneBuzzer(GPIO_PORTE , 1 ,1000 , 1000); //wait for 1 second between blinking periods //wait for 1 second between blinking periods
          }
 
 }
@@ -101,7 +100,13 @@ void Turn_off_LEDs()
    for(i = 1 ; i<= 3 ; i++ )
      GPIO_vidSetPinValue(GPIO_PORTF ,i , Low) ;
 }
-void SoundBuzzer(double frequency)
+void tuneBuzzer(uint8_t u8PortNumberCpy , uint8_t u8PinNumberCpy,uint32_t u32FreqCpy_Hz, uint32_t u32TimeCpy_ms)
 {
-
+	static uint8_t inst = 0;
+	uint8_t i;
+	for(i = 0; i < ((u32TimeCpy_ms*u32FreqCpy_Hz*2)/1000);i++){
+		GPIO_vidSetPinValue(u8PortNumberCpy, u8PinNumberCpy, inst);
+		inst ^= 1;
+		systic_vidDelay(1/(u32FreqCpy_Hz/1000));
+	}
 }
