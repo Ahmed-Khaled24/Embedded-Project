@@ -84,9 +84,8 @@ void LCD_vidWriteChar(char c) {
 	// [E] --> High to Low
 	GPIO_vidSetPinValue(GPIO_PORTB, E, Low);
 	systic_vid1MicroDelay();
-
-
 }
+
 void LCD_vidWriteString(char* string, unsigned int stringSize) {
 	for (int i = 0; i < stringSize; i++) {
 		if (i == 16) LCD_vidSendCommand(GoToSecondLine);
@@ -118,6 +117,83 @@ void LCD_vidCountDown(unsigned int timer) {
 		itoa(sec, StringSec, 10);
 	}
 }
+
+// These two functions to implement TakeInput().
+// 1.
+void printTimer(char* timer) {
+	// Loop 4 times as the timer consist of 4 digits.
+	for (uint8_t i = 0; i < 4; i++) {
+		if (i == 2)   LCD_vidWriteChar(':');
+		LCD_vidWriteChar(timer[i]);
+	}
+}
+// 2. 
+void shiftTimerLeft(char* timer) {
+	for (uint8_t i = 1; i < 4; i++) {
+		timer[i - 1] = timer[i];
+	}
+}
+
+uint16_t LCD_u16TakeInput(void) {
+/* 
+	 This function takes 4-digit (numbers) input from the user for example(1, 2, 3, 4)
+	 Important note: user must enter the numbers from left to right 1 -> 2 -> 3 -> 4 
+	 this produces the number 1234 which is 12 minutes and 34 seconds.
+*/
+	
+	// Create a timer.
+	char timer[4] = ['0', '0', '0', '0'];
+
+	// Clear the screen to start take input from the user.
+	LCD_vidClearScreen();
+	
+	// Print the current status of the timer to the screen [ 00:00 ].
+	printTimer(timer);
+
+	// Loop 4 times to read from the keypad.
+	for (uint8_t i = 0; i < 4; i++) {
+		uint8_t pressedButton = '\0';
+		
+		// Wait till the user press a button
+		while (pressedButton == '\0') {
+			pressedButton = KEYPAD_u8GetButton();
+		}
+
+		// Convert pressedButton to char to print on the screen, then add it to the right most cell in the timer.
+		char currentInput = pressedButton + '0';
+		timer[3] = currentInput;
+
+		// Print the timer with the new input on the LCD. 
+		// For example the user pressed 1 >>>> screen shows [ 00:01 ]
+		LCD_vidClearScreen();
+		printTimer(timer);
+
+		// Shift the timer digits left to take the next input except for the last iteration.
+		if (i < 3)
+			shiftTimerLeft(timer);
+
+		// Wait for 1 second for a new reaction from the user.
+		systic_vidDelay(1000);
+	}
+
+	// Extract the return value from the timer array.
+	uint16_t timerInt = 0;
+	for (uint8_t i = 0; i < 4; i++) {
+		uint16_t currentDigit = timer[i] - '0';
+		if (i == 0)
+			timerInt += (currentDigit * 1000);
+		else if (i == 1);
+			timerInt += (currentDigit * 100);
+		else if (i == 2)
+			timerInt += (currentDigit * 10);
+		else if (i == 3)
+			timerInt += currentDigit;	
+	}
+
+	return timerInt;
+}
+
+
 
 
 
