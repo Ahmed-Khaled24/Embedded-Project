@@ -93,10 +93,29 @@ void LCD_vidWriteString(char* string, unsigned int stringSize) {
 	}
 }
 
-void LCD_vidCountDown(unsigned int timer) {
-// you have to input the time as minutesSeconds ex: 1234 is 12 minutes 34 seconds , 123 is 1 minutes 23 seconds
+int MinToTimerStandard(double number) { // this function will be used in the countdown function
+	// It converts from minutes only to minutes and second form to be put in countdown function 
+	// this function's parameter must be in minutes, ex: 4.5 minutes to outpit 430 to be put in countdown method
 
-	unsigned int min = timer / 100, sec = timer % 100; 	// divide the lower 2 digits to seconds and upper 2 digits to minutes
+	int min = number; // taking the integer part
+	double sec = (number - min) * 0.6; // the part after the decimal point  getting it in second then dividing by a 100
+	double result = (min + sec) * 100; // adding the integer and the decimal part then multiplying by a 100 to get the standard form 
+									  // needed in the countdown function
+	return result;
+}
+
+
+
+void LCD_vidCountDown(double timer) {
+// you have to input the time as minutesSeconds, ex: 1234 is 12 minutes 34 seconds , 123 is 1 minutes 23 seconds
+// or as a minutes only format as its converted by the MinToTimerStandard function ex:4.5 becomes 430
+
+	if ((timer - (int)timer) != 0) {
+		timer = MinToTimerStandard(timer);
+	}
+
+
+	unsigned int min = timer / 100, sec = (int)timer % 100; 	// divide the lower 2 digits to seconds and upper 2 digits to minutes
 	char stringMin[20], StringSec[20]; 					// create the strings that are going to be outputted on the LCD
 	itoa(min, stringMin, 10); 							// coverts the current minutes to string to be written on LCD
 	itoa(sec, StringSec, 10); 							// coverts the current seconds to string to be written on LCD
@@ -192,6 +211,8 @@ uint16_t LCD_u16TakeInput(void) {
 
 	return timerInt;
 }
+
+
 
 
 
