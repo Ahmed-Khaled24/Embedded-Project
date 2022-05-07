@@ -1,8 +1,8 @@
 #include "LCD.h"
 #include "LCD-Commands.h"
-#include "GPIO_driver.h"
-#include "Systick.h"
-
+#include "../GPIO/GPIO_driver.h"
+#include "../Systick/Systick.h"
+#include "../Keypad/Keypad_interface.h"
 
 // Define RS as PB0 and E as PB1
 #define RS 0
@@ -88,41 +88,37 @@ void LCD_vidWriteChar(char c) {
 
 }
 void LCD_vidWriteString(char* string, unsigned int stringSize) {
-
 	for (int i = 0; i < stringSize; i++) {
 		if (i == 16) LCD_vidSendCommand(GoToSecondLine);
 		LCD_vidWriteChar(string[i]);
 	}
-
-
 }
 
 void LCD_vidCountDown(unsigned int timer) {
-	// you have to input the time as minutesSeconds ex: 1234 is 12 minutes 34 seconds , 123 is 1 minutes 23 seconds
+// you have to input the time as minutesSeconds ex: 1234 is 12 minutes 34 seconds , 123 is 1 minutes 23 seconds
 
-	unsigned int min = timer / 100, sec = timer % 100; // divide the lower 2 digits to seconds and upper 2 digits to minutes
-	char stringMin[20], StringSec[20]; // create the strings that are going to be outputted on the LCD
-	itoa(min, stringMin, 10); // coverts the current minutes to string to be written on LCD
-	itoa(sec, StringSec, 10); // coverts the current seconds to string to be written on LCD
-	while (atoi(stringMin) >= 0) { // keeps looping till the minutes reach 0
-		while (atoi(StringSec) >= 1) { // keeps looping till the seconds reach 0
+	unsigned int min = timer / 100, sec = timer % 100; 	// divide the lower 2 digits to seconds and upper 2 digits to minutes
+	char stringMin[20], StringSec[20]; 					// create the strings that are going to be outputted on the LCD
+	itoa(min, stringMin, 10); 							// coverts the current minutes to string to be written on LCD
+	itoa(sec, StringSec, 10); 							// coverts the current seconds to string to be written on LCD
+	while (atoi(stringMin) >= 0) { 						// keeps looping till the minutes reach 0
+		while (atoi(StringSec) >= 1) { 					// keeps looping till the seconds reach 0
 			itoa(min, stringMin, 10);
 			LCD_vidWriteString(stringMin, strlen(stringMin));
 			LCD_vidWriteChar(':');
 			itoa(sec, StringSec, 10);
 			LCD_vidWriteString(StringSec, strlen(StringSec));
-			delay(1000); //wait a second to decrement a unit digit in the seconds
+			systic_vidDelay(1000); 						//wait a second to decrement a unit digit in the seconds
 			LCD_vidSendCommand(ClearScreen);
 			sec--; 
 		}
-
-		sec = 59; // set the seconds to a whole minute
+		sec = 59;										// set the seconds to a whole minute
 		min--;
-		itoa(min, stringMin, 10);// re initialize the minutes and seconds
+		itoa(min, stringMin, 10);						// re initialize the minutes and seconds
 		itoa(sec, StringSec, 10);
-
 	}
-
 }
+
+
 
 
