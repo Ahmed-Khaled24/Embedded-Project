@@ -115,10 +115,10 @@ void LCD_vidCountDown(double timer) {
 	}
 
 
-	unsigned int min = timer / 100, sec = (int)timer % 100; 	// divide the lower 2 digits to seconds and upper 2 digits to minutes
+	unsigned int min = timer / 100, sec = (int)timer % 100; 		// divide the lower 2 digits to seconds and upper 2 digits to minutes
 	char stringMin[20], StringSec[20]; 					// create the strings that are going to be outputted on the LCD
-	itoa(min, stringMin, 10); 							// coverts the current minutes to string to be written on LCD
-	itoa(sec, StringSec, 10); 							// coverts the current seconds to string to be written on LCD
+	itoa(min, stringMin, 10); 						// coverts the current minutes to string to be written on LCD
+	itoa(sec, StringSec, 10); 						// coverts the current seconds to string to be written on LCD
 	while (atoi(stringMin) >= 0) { 						// keeps looping till the minutes reach 0
 		while (atoi(StringSec) >= 1) { 					// keeps looping till the seconds reach 0
 			itoa(min, stringMin, 10);
@@ -126,13 +126,13 @@ void LCD_vidCountDown(double timer) {
 			LCD_vidWriteChar(':');
 			itoa(sec, StringSec, 10);
 			LCD_vidWriteString(StringSec, strlen(StringSec));
-			systic_vidDelay(1000); 						//wait a second to decrement a unit digit in the seconds
+			systic_vidDelay(1000); 					//wait a second to decrement a unit digit in the seconds
 			LCD_vidSendCommand(ClearScreen);
 			sec--; 
 		}
-		sec = 59;										// set the seconds to a whole minute
+		sec = 59;							// set the seconds to a whole minute
 		min--;
-		itoa(min, stringMin, 10);						// re initialize the minutes and seconds
+		itoa(min, stringMin, 10);					// re initialize the minutes and seconds
 		itoa(sec, StringSec, 10);
 	}
 }
@@ -156,8 +156,10 @@ void shiftTimerLeft(char* timer) {
 uint16_t LCD_u16TakeInput(void) {
 /* 
 	 This function takes 4-digit (numbers) input from the user for example(1, 2, 3, 4)
-	 Important note: user must enter the numbers from left to right 1 -> 2 -> 3 -> 4 
+	 Important note(1): user must enter the numbers from left to right 1 -> 2 -> 3 -> 4 
 	 this produces the number 1234 which is 12 minutes and 34 seconds.
+	 Important note(2): the 4-digin input must be less than or equal 3000, if bigger 
+	 the function returns -1.
 */
 	
 	// Create a timer.
@@ -208,8 +210,11 @@ uint16_t LCD_u16TakeInput(void) {
 		else if (i == 3)
 			timerInt += currentDigit;	
 	}
-
-	return timerInt;
+	
+	if(timerInt >= 1 && timerInt <= 3000)
+		return timerInt;
+	else 
+		return -1;
 }
 
 
