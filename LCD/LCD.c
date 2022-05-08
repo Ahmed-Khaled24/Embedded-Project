@@ -161,7 +161,7 @@ uint16_t LCD_u16TakeInput(void) {
 */
 	
 	// Create a timer.
-	char timer[4] = ['0', '0', '0', '0'];
+	char timer[4] = {'0', '0', '0', '0'};
 
 	// Clear the screen to start take input from the user.
 	LCD_vidClearScreen();
@@ -201,7 +201,7 @@ uint16_t LCD_u16TakeInput(void) {
 		uint16_t currentDigit = timer[i] - '0';
 		if (i == 0)
 			timerInt += (currentDigit * 1000);
-		else if (i == 1);
+		else if (i == 1)
 			timerInt += (currentDigit * 100);
 		else if (i == 2)
 			timerInt += (currentDigit * 10);
