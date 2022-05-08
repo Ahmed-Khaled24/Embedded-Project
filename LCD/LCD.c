@@ -214,7 +214,7 @@ uint16_t LCD_u16TakeInput(void) {
 	if(timerInt >= 1 && timerInt <= 3000)
 		return timerInt;
 	else 
-		return -1;
+		return 0;
 }
 
 
