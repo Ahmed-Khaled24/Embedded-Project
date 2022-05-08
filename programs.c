@@ -49,7 +49,9 @@ void Program_D() //for other kinds of food
 {
      uint16_t  timer  ;
      LCD_vidWriteString("Cooking time?", strlen("Cooking time?") );
-     timer = LCD_u16TakeInput() ;
+    do{
+        timer = LCD_u16TakeInput() ; //user must enter a valid time (1 till 30:00)
+     }while(timer == 0);
      if(GPIO_u8GetPinValue(GPIO_PORTF,4) == Low) //switch 1 pressed to clear LCD
         LCD_vidClearScreen();
      while(Oven_Ready() == 0) ; //wait until door is closed switch 2 is pressed then the LEDs are on and the countdown starts
