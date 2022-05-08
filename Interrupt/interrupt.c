@@ -15,7 +15,7 @@ GPIO_PORTF_DIR_R |= 0x0E; //Pin1,2,3 is output
 GPIO_PORTF_DEN_R |=0x0E;
 GPIO_PORTF_DATA_R &=~0x0E; //intialize pins 1,2,3 to be off
 }	
-
+unsigned char InterruptsControl;
 
 void Interrupt_Init(void){
 SYSCTL_RCGCGPIO_R |= 0x00000020; // activate clock for port F
@@ -25,6 +25,7 @@ GPIO_PORTF_PUR_R |= 0x10; // enable weak pull-up on PF4
 GPIO_PORTF_IS_R &= ~0x10; // PF4 is edge-sensitive
 GPIO_PORTF_IBE_R &= ~0x10; // PF4 is not both edges
 //PortF Interrupt Initialization
+InterruptsControl++;
 GPIO_PORTF_IEV_R |=0x10; // PF4 RAISING edge event
 GPIO_PORTF_ICR_R = 0x10; // clear flag4
 GPIO_PORTF_IM_R |= 0x10; // arm interrupt on PF4
@@ -38,9 +39,15 @@ void GPIOPortF_Handler(void){
 	RGB_Init();
 	while(1){
 
+		
+		if(InterruptsControl>1){
 		GPIO_PORTF_DATA_R ^= 0x0E;
 		LCD_vidPause();
 		systick_vidDelay(2000);
+		}
+		else if(InterruptsControl==1){
+			//pause(Systic delay) or LCD function
 		
+		}
 	}
 }
