@@ -3,8 +3,8 @@
 #define SYSTIC_DRIVER_H
 
 
-void systic_vidInit(void);
-void systic_vid1msDelay();
-void systic_vid1MicroDelay();
-void systic_vidDelay(unsigned uint32_t ms);
+void systick_vidInit(void);
+void systick_vid1msDelay();
+void systick_vid1MicroDelay();
+void systick_vidDelay(uint32_t ms);
 #endif
