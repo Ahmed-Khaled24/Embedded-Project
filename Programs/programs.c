@@ -31,7 +31,7 @@ Repeat:  if(key == KEYPAD_u8R2C4) //in case keypad button 'B' is pressed ,
         case 1 ... 9: //any integer between 1 and 9 is accepted
             LCD_vidClearScreen();
             LCD_vidWriteChar(kilograms) ; //write the number of kilograms entered
-            systic_vidDelay(2000); //2 seconds delay
+            systick_vidDelay(2000); //2 seconds delay
             while(Oven_Ready() == 0) ; //must wait until door is closed and SW2 is pressed
             Turn_on_LEDs() ;
             LCD_vidClearScreen();
@@ -40,7 +40,7 @@ Repeat:  if(key == KEYPAD_u8R2C4) //in case keypad button 'B' is pressed ,
         default: //invalid number of kilograms
             LCD_vidClearScreen();
             LCD_vidWriteString("Err", strlen("Err")  );
-            systic_vidDelay(2000);
+            systick_vidDelay(2000);
             goto Repeat ;
         }
 }
@@ -98,6 +98,6 @@ void tuneBuzzer(uint8_t u8PortNumberCpy , uint8_t u8PinNumberCpy,uint32_t u32Fre
 	for(i = 0; i < ((u32TimeCpy_ms*u32FreqCpy_Hz*2)/1000);i++){
 		GPIO_vidSetPinValue(u8PortNumberCpy, u8PinNumberCpy, inst);
 		inst ^= 1;
-		systic_vidDelay(1/(u32FreqCpy_Hz/1000));
+		systick_vidDelay(1/(u32FreqCpy_Hz/1000));
 	}
 }

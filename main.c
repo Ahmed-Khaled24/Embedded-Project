@@ -30,7 +30,7 @@ int main()
                     break;
             default:
                     LCD_vidWriteString("Error", strlen("Error")); //otherwise , LCD displays Error and then it clears
-                    systic_vidDelay(2000); //wait for 2 seconds
+                    systick_vidDelay(2000); //wait for 2 seconds
                     LCD_vidClearScreen();
                     continue ; //to skip entering the finishing program
         }
