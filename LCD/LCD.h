@@ -21,10 +21,10 @@ void LCD_vidWriteChar(char c);
 void LCD_vidWriteString(char* string, unsigned int stringSize);
 
 // Countdown timer 
-void LCD_vidCountDown(unsigned int timer);
+void LCD_vidCountDown(double timer);
 
 // Take 4-digit input from the user and return the input.
-uint16_t LCD_vidTakeInput(void);
+uint16_t LCD_u16TakeInput(void);
 
 
 #endif
