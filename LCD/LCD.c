@@ -5,10 +5,6 @@
 #include "../Keypad/Keypad_interface.h"
 #include "LCD_configuration.h"
 
-// Define RS as PB0 and E as PB1
-#define RS 0
-#define E  1
-
 
 void LCD_vidSendCommand(unsigned char command) {
 	// Select to write on command register [RS = 0]
@@ -131,8 +127,6 @@ int MinToTimerStandard(double number) { // this function will be used in the cou
 	return result;
 }
 
-
-
 void LCD_vidCountDown(double timer) {
 // you have to input the time as minutesSeconds, ex: 1234 is 12 minutes 34 seconds , 123 is 1 minutes 23 seconds
 // or as a minutes only format as its converted by the MinToTimerStandard function ex:4.5 becomes 430
@@ -182,11 +176,11 @@ void shiftTimerLeft(char* timer) {
 
 uint16_t LCD_u16TakeInput(void) {
 /* 
-	 This function takes 4-digit (numbers) input from the user for example(1, 2, 3, 4)
+	 This function takes 4-digit (numbers) input from the user for example (1, 2, 3, 4)
 	 Important note(1): user must enter the numbers from left to right 1 -> 2 -> 3 -> 4 
 	 this produces the number 1234 which is 12 minutes and 34 seconds.
-	 Important note(2): the 4-digin input must be less than or equal 3000, if bigger 
-	 the function returns -1.
+	 Important note(2): the 4-digit input must be less than or equal 3000, if bigger 
+	 the function returns 0.
 */
 	
 	// Create a timer.
