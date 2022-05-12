@@ -905,7 +905,9 @@ void GPIO_DIO_vidPortInit(uint8_t u8PortNumberCpy){
 	else if(u8PortNumberCpy==GPIO_PORTF)GPIO_vidUnlockPF0();
 	GPIO_vidSetPortAnalogEnable(u8PortNumberCpy,Low);
 	GPIO_vidActPortAlternateFunction(u8PortNumberCpy,Low);
-	GPIO_vidSetPortDigitalEnable(u8PortNumberCpy,High);
+	if(u8PortNumberCpy == GPIO_PORTF)GPIO_vidSetPortDigitalEnable(u8PortNumberCpy,0x1F);
+	else if(u8PortNumberCpy == GPIO_PORTE)GPIO_vidSetPortDigitalEnable(u8PortNumberCpy,0x3F);
+	else GPIO_vidSetPortDigitalEnable(u8PortNumberCpy,0xFF);
 	GPIO_vidSetPortAlternateFunc(u8PortNumberCpy,0);
 	
 }
