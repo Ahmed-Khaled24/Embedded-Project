@@ -3,6 +3,7 @@
 #include "../GPIO/GPIO_driver.h"
 #include "../Systick/Systick.h"
 #include "../Keypad/Keypad_interface.h"
+#include "LCD_configuration.h"
 
 // Define RS as PB0 and E as PB1
 #define RS 0
@@ -12,21 +13,28 @@
 void LCD_vidSendCommand(unsigned char command) {
 	// Select to write on command register [RS = 0]
 	// According to datasheet time digram a delay of 40ns should be applied before set E = 1.
-	GPIO_vidSetPinValue(GPIO_PORTB, RS, Low);
+	GPIO_vidSetPinValue(LCD_PRS_PORT, LCD_PRS, Low);
 	systick_vid1MicroDelay();
 
-	// Apply the command bits to data bits D0->D7 of the LCD that connected to port-D
+	// Apply the command bits to data bits D0->D7 of the LCD.
 	// According to datasheet time digram a delay of 80ns should be applied before the falling edge of E.
-	GPIO_vidSetPortValue(GPIO_PORTD, command);
+	GPIO_vidSetPinValue(LCD_PD0_PORT, LCD_PD0, ((command) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD1_PORT, LCD_PD1, ((command >> 1) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD2_PORT, LCD_PD2, ((command >> 2) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD3_PORT, LCD_PD3, ((command >> 3) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD4_PORT, LCD_PD4, ((command >> 4) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD5_PORT, LCD_PD5, ((command >> 5) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD6_PORT, LCD_PD6, ((command >> 6) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD7_PORT, LCD_PD7, ((command >> 7) & 0x1));
 	systick_vid1MicroDelay() ;
 
 	// Create falling edge for the write operation to start
 	// According to datasheet time digram the pulse width must be greater than 230ns
 	// [E] --> Low to High
-	GPIO_vidSetPinValue(GPIO_PORTB, E, High);
+	GPIO_vidSetPinValue(LCD_PE_PORT, LCD_PE, High);
 	systick_vid1MicroDelay();
 	// [E] --> High to Low
-	GPIO_vidSetPinValue(GPIO_PORTB, E, Low);
+	GPIO_vidSetPinValue(LCD_PE_PORT, LCD_PE, Low);
 	systick_vid1MicroDelay();
 
 	// If the command is ClearScreen or ResetCursor it will take 1.64ms to apply the command so,
@@ -43,17 +51,29 @@ void LCD_vidScreenInit(void) {
 	systick_vidDelay(15);
 
 	// Setup tiva pins
-	// 1. use port-D for 8-bit data.
-	GPIO_DIO_vidPortInit(GPIO_PORTD);
-	GPIO_vidSetPortDirection(GPIO_PORTD, 0xFF);
-
-	// 2. use pins B0, B1
-	//             RS, E
-	GPIO_DIO_vidPinInit(GPIO_PORTB, RS);
-	GPIO_DIO_vidPinInit(GPIO_PORTB, E);
-	GPIO_vidSetPinDirection(GPIO_PORTB, RS, High);
-	GPIO_vidSetPinDirection(GPIO_PORTB, E, High);
-
+	// Initialize all pins.
+	GPIO_DIO_vidPinInit(LCD_PD0_PORT, LCD_PD0);
+	GPIO_DIO_vidPinInit(LCD_PD1_PORT, LCD_PD1);
+	GPIO_DIO_vidPinInit(LCD_PD2_PORT, LCD_PD2);
+	GPIO_DIO_vidPinInit(LCD_PD3_PORT, LCD_PD3);
+	GPIO_DIO_vidPinInit(LCD_PD4_PORT, LCD_PD4);
+	GPIO_DIO_vidPinInit(LCD_PD5_PORT, LCD_PD5);
+	GPIO_DIO_vidPinInit(LCD_PD6_PORT, LCD_PD6);
+	GPIO_DIO_vidPinInit(LCD_PD7_PORT, LCD_PD7);
+	GPIO_DIO_vidPinInit(LCD_PRS_PORT, LCD_PRS);
+	GPIO_DIO_vidPinInit(LCD_PE_PORT, LCD_PE);
+	
+	// Set all pins to output.
+	GPIO_vidSetPinDirection(LCD_PD0_PORT, LCD_PD0, High);
+	GPIO_vidSetPinDirection(LCD_PD1_PORT, LCD_PD1, High);
+	GPIO_vidSetPinDirection(LCD_PD2_PORT, LCD_PD2, High);
+	GPIO_vidSetPinDirection(LCD_PD3_PORT, LCD_PD3, High);
+	GPIO_vidSetPinDirection(LCD_PD4_PORT, LCD_PD4, High);
+	GPIO_vidSetPinDirection(LCD_PD5_PORT, LCD_PD5, High);
+	GPIO_vidSetPinDirection(LCD_PD6_PORT, LCD_PD6, High);
+	GPIO_vidSetPinDirection(LCD_PD7_PORT, LCD_PD7, High);
+	GPIO_vidSetPinDirection(LCD_PRS_PORT, LCD_PRS, High);
+	GPIO_vidSetPinDirection(LCD_PE_PORT, LCD_PE, High);
 
 	// Setup the LCD.
 	LCD_vidSendCommand(Set_8bit_5x7_2Line);
@@ -69,20 +89,27 @@ void LCD_vidClearScreen(void) {
 
 void LCD_vidWriteChar(char c) {
 	//set RS for data registers (Read/write) and wait for delay
-	GPIO_vidSetPinValue(GPIO_PORTB, RS, High);
+	GPIO_vidSetPinValue(LCD_PRS_PORT, LCD_PRS, High);
 	systick_vid1MicroDelay();
 
 	//add character bits inputted in the pins D0 -> D7 and wait for delay
-	GPIO_vidSetPortValue(GPIO_PORTD, c);
+	GPIO_vidSetPinValue(LCD_PD0_PORT, LCD_PD0, ((c) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD1_PORT, LCD_PD1, ((c >> 1) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD2_PORT, LCD_PD2, ((c >> 2) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD3_PORT, LCD_PD3, ((c >> 3) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD4_PORT, LCD_PD4, ((c >> 4) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD5_PORT, LCD_PD5, ((c >> 5) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD6_PORT, LCD_PD6, ((c >> 6) & 0x1));
+	GPIO_vidSetPinValue(LCD_PD7_PORT, LCD_PD7, ((c >> 7) & 0x1));
 	systick_vid1MicroDelay();
 
 	// Create falling edge for the write operation to start
     // According to datasheet time digram the pulse width must be greater than 230ns
     // [E] --> Low to High
-	GPIO_vidSetPinValue(GPIO_PORTB, E, High);
+	GPIO_vidSetPinValue(LCD_PE_PORT, LCD_PE, High);
 	systick_vid1MicroDelay();
 	// [E] --> High to Low
-	GPIO_vidSetPinValue(GPIO_PORTB, E, Low);
+	GPIO_vidSetPinValue(LCD_PE_PORT, LCD_PE, Low);
 	systick_vid1MicroDelay();
 }
 

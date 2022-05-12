@@ -28,5 +28,4 @@
 #define LCD_PRS_PORT		GPIO_PORTB
 #define LCD_PE_PORT			GPIO_PORTB
 
-
 #endif
