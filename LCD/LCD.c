@@ -138,23 +138,32 @@ void LCD_vidCountDown(double timer) {
 
 	unsigned int min = timer / 100, sec = (int)timer % 100; 		// divide the lower 2 digits to seconds and upper 2 digits to minutes
 	char stringMin[20], StringSec[20]; 					// create the strings that are going to be outputted on the LCD
-	itoa(min, stringMin, 10); 						// coverts the current minutes to string to be written on LCD
-	itoa(sec, StringSec, 10); 						// coverts the current seconds to string to be written on LCD
+	sprintf(stringMin, "%d", min); 						// coverts the current minutes to string to be written on LCD
+	sprintf(StringSec,"%d", sec); 						// coverts the current seconds to string to be written on LCD
 	while (atoi(stringMin) >= 0) { 						// keeps looping till the minutes reach 0
 		while (atoi(StringSec) >= 1) { 					// keeps looping till the seconds reach 0
-			itoa(min, stringMin, 10);
+			sprintf(stringMin, "%d", min);
 			LCD_vidWriteString(stringMin, strlen(stringMin));
 			LCD_vidWriteChar(':');
-			itoa(sec, StringSec, 10);
-			LCD_vidWriteString(StringSec, strlen(StringSec));
+			if (sec < 10) { // If the seconds are in the units write a 0 before it
+				LCD_vidWriteChar('0');
+				sprintf(StringSec, "%d", sec);
+				LCD_vidWriteChar(sec + '0');
+
+			}
+			else { // If not write the string normally
+				sprintf(StringSec, "%d", sec); 
+				LCD_vidWriteString(StringSec, strlen(StringSec));
+			}
+			
 			systick_vidDelay(1000); 					//wait a second to decrement a unit digit in the seconds
 			LCD_vidSendCommand(ClearScreen);
 			sec--; 
 		}
 		sec = 59;							// set the seconds to a whole minute
 		min--;
-		itoa(min, stringMin, 10);					// re initialize the minutes and seconds
-		itoa(sec, StringSec, 10);
+		sprintf(stringMin, "%d", min); 					// re initialize the minutes and seconds
+		sprintf(StringSec, "%d", sec);
 	}
 }
 
