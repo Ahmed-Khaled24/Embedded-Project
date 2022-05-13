@@ -137,13 +137,13 @@ void LCD_vidCountDown(double timer) {
 
 
 	unsigned int min = timer / 100, sec = (int)timer % 100; 		// divide the lower 2 digits to seconds and upper 2 digits to minutes
-	char stringMin[20], StringSec[20]; 					// create the strings that are going to be outputted on the LCD
-	sprintf(stringMin, "%d", min); 						// coverts the current minutes to string to be written on LCD
+	char StringMin[20], StringSec[20]; 					// create the strings that are going to be outputted on the LCD
+	sprintf(StringMin, "%d", min); 						// coverts the current minutes to string to be written on LCD
 	sprintf(StringSec,"%d", sec); 						// coverts the current seconds to string to be written on LCD
-	while (atoi(stringMin) >= 0) { 						// keeps looping till the minutes reach 0
+	while (atoi(StringMin) >= 0) { 						// keeps looping till the minutes reach 0
 		while (atoi(StringSec) >= 1) { 					// keeps looping till the seconds reach 0
-			sprintf(stringMin, "%d", min);
-			LCD_vidWriteString(stringMin, strlen(stringMin));
+			sprintf(StringMin, "%d", min);
+			LCD_vidWriteString(StringMin, strlen(StringMin));
 			LCD_vidWriteChar(':');
 			if (sec < 10) { // If the seconds are in the units write a 0 before it
 				LCD_vidWriteChar('0');
@@ -162,7 +162,7 @@ void LCD_vidCountDown(double timer) {
 		}
 		sec = 59;							// set the seconds to a whole minute
 		min--;
-		sprintf(stringMin, "%d", min); 					// re initialize the minutes and seconds
+		sprintf(StringMin, "%d", min); 					// re initialize the minutes and seconds
 		sprintf(StringSec, "%d", sec);
 	}
 }
