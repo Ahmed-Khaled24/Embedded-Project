@@ -117,6 +117,10 @@ void LCD_vidWriteString(char* string, uint8_t stringSize) {
 	}
 }
 
+
+// The next 4 function are to be implemented in LCD_vidCountDown()
+
+// Returns the timer in standard form (minutes seconds)
 double MinToTimerStandard(double number); // prototype.
 double MinToTimerStandard(double number) { /* 
 	this function will be used in the countdown function
@@ -133,6 +137,7 @@ double MinToTimerStandard(double number) { /*
 
 
 // Returns the length of the String to compensate for strlen
+uint16_t String_Size(char string[]) // prototype.
 uint16_t String_Size(char string[]) {
 	int i = 0;
 	while (string[i] != '\0') { // Checking for null character at the end of the string
@@ -142,9 +147,11 @@ uint16_t String_Size(char string[]) {
 }
 
 // Return the int value of the string to compensate for atoi() 
+uint16_t String_To_Int(char string[]) // prototype.
 uint16_t String_To_Int(char string[]) {
 	uint16_t myInt = 0;
-	for (uint16_t i = 0 ; i < String_Size(string); i++) { // loop the string 
+	uint16_t i = 0
+	for (i  ; i < String_Size(string); i++) { // loop the string 
 		myInt += string[i] - '0'; // add the character then multiply by 10 to add the next character in the next position
 		if(i != String_Size(string) -1 ) myInt *= 10; // the if condition to prevent the last 0.
 	}
@@ -152,6 +159,7 @@ uint16_t String_To_Int(char string[]) {
 }
 
 // Create a String of the Int value passed and store it in the string passed .
+void Int_To_String(char string[], uint16_t input);
 void Int_To_String(char string[], uint16_t input) {
 
 	uint16_t reversedInput = 0;  // reverse the integer before changing it to string.
@@ -172,21 +180,18 @@ void Int_To_String(char string[], uint16_t input) {
 
 }
 
-
-
-
-
-
+// Starts countdown on screen with the timer given
+void LCD_vidCountDown(double timer) // prototype.
 void LCD_vidCountDown(double timer) {
 // you have to input the time as minutesSeconds, ex: 1234 is 12 minutes 34 seconds , 123 is 1 minutes 23 seconds
 // or as a minutes only format as its converted by the MinToTimerStandard function ex:4.5 becomes 430
 
-	if ((timer - (int)timer) != 0) {
+	if ((timer - (uint16_t)timer) != 0) {
 		timer = MinToTimerStandard(timer);
 	}
 
 
-	unsigned int min = timer / 100, sec = (int)timer % 100; 		// divide the lower 2 digits to seconds and upper 2 digits to minutes
+	uint16_t min = timer / 100, sec = (uint16_t)timer % 100; 		// divide the lower 2 digits to seconds and upper 2 digits to minutes
 	char StringMin[20], StringSec[20]; 					// create the strings that are going to be outputted on the LCD
 	Int_To_String(StringMin, min); 						// coverts the current minutes to string to be written on LCD
 	Int_To_String(StringSec, sec);						// coverts the current seconds to string to be written on LCD
