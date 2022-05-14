@@ -139,7 +139,7 @@ double MinToTimerStandard(double number) { /*
 
 
 // Starts countdown on screen with the timer given
-void LCD_vidCountDown(double timer) // prototype.
+void LCD_vidCountDown(double timer); // prototype.
 void LCD_vidCountDown(double timer) {
 // you have to input the time as minutesSeconds, ex: 1234 is 12 minutes 34 seconds , 123 is 1 minutes 23 seconds
 // or as a minutes only format as its converted by the MinToTimerStandard function ex:4.5 becomes 430
