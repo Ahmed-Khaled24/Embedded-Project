@@ -18,7 +18,7 @@ void LCD_vidClearScreen(void);
 void LCD_vidWriteChar(char c);
 
 // Write a string on the LCD
-void LCD_vidWriteString(char* string, unsigned int stringSize);
+void LCD_vidWriteString(char* string, uint8_t stringSize);
 
 // Countdown timer 
 void LCD_vidCountDown(double timer);

@@ -109,19 +109,23 @@ void LCD_vidWriteChar(char c) {
 	systick_vid1MicroDelay();
 }
 
-void LCD_vidWriteString(char* string, unsigned int stringSize) {
-	for (int i = 0; i < stringSize; i++) {
+void LCD_vidWriteString(char* string, uint8_t stringSize) {
+	uint8_t i;
+	for (i = 0; i < stringSize; i++) {
 		if (i == 16) LCD_vidSendCommand(GoToSecondLine);
 		LCD_vidWriteChar(string[i]);
 	}
 }
 
-int MinToTimerStandard(double number) { // this function will be used in the countdown function
-	// It converts from minutes only to minutes and second form to be put in countdown function 
-	// this function's parameter must be in minutes, ex: 4.5 minutes to outpit 430 to be put in countdown method
+double MinToTimerStandard(double number); // prototype.
+double MinToTimerStandard(double number) { /* 
+	this function will be used in the countdown function
+	It converts from minutes only to minutes and second form to be put in countdown function 
+	this function's parameter must be in minutes, ex: 4.5 minutes to outpit 430 to be put in countdown method
+	*/
 
-	int min = number; // taking the integer part
-	double sec = (number - min) * 0.6; // the part after the decimal point  getting it in second then dividing by a 100
+	int min = (int)number; // taking the integer part
+	double sec = (number - (double)min) * 0.6; // the part after the decimal point  getting it in second then dividing by a 100
 	double result = (min + sec) * 100; // adding the integer and the decimal part then multiplying by a 100 to get the standard form 
 									  // needed in the countdown function
 	return result;
@@ -169,16 +173,20 @@ void LCD_vidCountDown(double timer) {
 
 // These two functions to implement TakeInput().
 // 1.
+void printTimer(char* timer); // prototype.
 void printTimer(char* timer) {
 	// Loop 4 times as the timer consist of 4 digits.
-	for (uint8_t i = 0; i < 4; i++) {
+	uint8_t i;
+	for (i = 0; i < 4; i++) {
 		if (i == 2)   LCD_vidWriteChar(':');
 		LCD_vidWriteChar(timer[i]);
 	}
 }
 // 2. 
+void shiftTimerLeft(char* timer); // prototype.
 void shiftTimerLeft(char* timer) {
-	for (uint8_t i = 1; i < 4; i++) {
+	uint8_t i;
+	for (i = 1; i < 4; i++) {
 		timer[i - 1] = timer[i];
 	}
 }
@@ -202,7 +210,8 @@ uint16_t LCD_u16TakeInput(void) {
 	printTimer(timer);
 
 	// Loop 4 times to read from the keypad.
-	for (uint8_t i = 0; i < 4; i++) {
+	uint8_t i;
+	for (i = 0; i < 4; i++) {
 		uint8_t pressedButton = '\0';
 		
 		// Wait till the user press a button
@@ -229,7 +238,7 @@ uint16_t LCD_u16TakeInput(void) {
 
 	// Extract the return value from the timer array.
 	uint16_t timerInt = 0;
-	for (uint8_t i = 0; i < 4; i++) {
+	for (i = 0; i < 4; i++) {
 		uint16_t currentDigit = timer[i] - '0';
 		if (i == 0)
 			timerInt += (currentDigit * 1000);
