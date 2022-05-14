@@ -133,7 +133,7 @@ double MinToTimerStandard(double number) { /*
 
 
 // Returns the length of the String to compensate for strlen
-int String_Size(char String[]) {  
+int String_Size(char string[]) {  
 	int i = 0;
 	while (string[i] != '\0') { // Checking for null character at the end of the string
 		i++; // length counter
@@ -141,7 +141,15 @@ int String_Size(char String[]) {
 	return i;
 }
 
-
+// Return the int value of the string to compensate for atoi() 
+int String_To_Int(char string[]) {
+	int myInt = 0; 
+	for ( int i = 0 ; i < String_Size(string); i++) { // loop the string 
+		myInt += string[i] - '0'; // add the character then multiply by 10 to add the next character in the next position
+		if(i != String_Size(string) -1 ) myInt *= 10; // the if condition to prevent the last 0
+	}
+	return myInt;
+}
 
 
 
