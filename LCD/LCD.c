@@ -133,7 +133,7 @@ double MinToTimerStandard(double number) { /*
 
 
 // Returns the length of the String to compensate for strlen
-int String_Size(char string[]) {  
+uint16_t String_Size(char string[]) {
 	int i = 0;
 	while (string[i] != '\0') { // Checking for null character at the end of the string
 		i++; // length counter
@@ -142,13 +142,34 @@ int String_Size(char string[]) {
 }
 
 // Return the int value of the string to compensate for atoi() 
-int String_To_Int(char string[]) {
-	int myInt = 0; 
-	for ( int i = 0 ; i < String_Size(string); i++) { // loop the string 
+uint16_t String_To_Int(char string[]) {
+	uint16_t myInt = 0;
+	for (uint16_t i = 0 ; i < String_Size(string); i++) { // loop the string 
 		myInt += string[i] - '0'; // add the character then multiply by 10 to add the next character in the next position
-		if(i != String_Size(string) -1 ) myInt *= 10; // the if condition to prevent the last 0
+		if(i != String_Size(string) -1 ) myInt *= 10; // the if condition to prevent the last 0.
 	}
 	return myInt;
+}
+
+// Create a String of the Int value passed and store it in the string passed .
+void Int_To_String(char string[], uint16_t input) {
+
+	uint16_t reversedInput = 0;  // reverse the integer before changing it to string.
+	while (input != 0) {
+		reversedInput += input % 10;
+		reversedInput *= 10;
+		input /= 10;
+	}
+	reversedInput /= 10; // to eliminate the extra 0 at the end.
+
+
+	uint16_t i = 0;  // counter
+	while (reversedInput != 0) { // Looping the string to store the reversed input.
+		string[i] = (reversedInput%10) + '0'; 
+		reversedInput /= 10;
+		i++;
+	}
+
 }
 
 
@@ -167,21 +188,19 @@ void LCD_vidCountDown(double timer) {
 
 	unsigned int min = timer / 100, sec = (int)timer % 100; 		// divide the lower 2 digits to seconds and upper 2 digits to minutes
 	char StringMin[20], StringSec[20]; 					// create the strings that are going to be outputted on the LCD
-	sprintf(StringMin, "%d", min); 						// coverts the current minutes to string to be written on LCD
-	sprintf(StringSec,"%d", sec); 						// coverts the current seconds to string to be written on LCD
+	Int_To_String(StringMin, min); 						// coverts the current minutes to string to be written on LCD
+	Int_To_String(StringSec, sec);						// coverts the current seconds to string to be written on LCD
 	while (String_To_Int(StringMin) >= 0) { 						// keeps looping till the minutes reach 0
 		while (String_To_Int(StringSec) >= 1) { 					// keeps looping till the seconds reach 0
-			sprintf(StringMin, "%d", min);
+			Int_To_String(StringMin, min);
 			LCD_vidWriteString(StringMin, String_Size(StringMin));
 			LCD_vidWriteChar(':');
 			if (sec < 10) { // If the seconds are in the units write a 0 before it
 				LCD_vidWriteChar('0');
-				sprintf(StringSec, "%d", sec);
 				LCD_vidWriteChar(sec + '0');
-
 			}
 			else { // If not write the string normally
-				sprintf(StringSec, "%d", sec); 
+				Int_To_String(StringSec, sec);
 				LCD_vidWriteString(StringSec, String_Size(StringSec));
 			}
 			
@@ -191,8 +210,8 @@ void LCD_vidCountDown(double timer) {
 		}
 		sec = 59;							// set the seconds to a whole minute
 		min--;
-		sprintf(StringMin, "%d", min); 					// re initialize the minutes and seconds
-		sprintf(StringSec, "%d", sec);
+		Int_To_String(StringMin, min); 					// re initialize the minutes and seconds
+		Int_To_String(StringSec, sec);
 	}
 }
 
