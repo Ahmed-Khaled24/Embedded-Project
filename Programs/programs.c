@@ -26,9 +26,9 @@ Repeat:  if(key == KEYPAD_u8R2C4) //in case keypad button 'B' is pressed ,
             defrost_rate =  CHICKEN_DEFROST_RATE ; //set the defrost_rate to be 0.2
          }
          kilograms = KEYPAD_u8GetButton(); //the button entered represents the number of kilograms
-        switch(kilograms)
-        {
-        case 1 ... 9: //any integer between 1 and 9 is accepted
+        if(kilograms >= 1 && kilograms <=9)
+	{	
+           //any integer between 1 and 9 is accepted
             LCD_vidClearScreen();
             LCD_vidWriteChar(kilograms) ; //write the number of kilograms entered
             systick_vidDelay(2000); //2 seconds delay
@@ -36,8 +36,8 @@ Repeat:  if(key == KEYPAD_u8R2C4) //in case keypad button 'B' is pressed ,
             Turn_on_LEDs() ;
             LCD_vidClearScreen();
             LCD_vidCountDown(defrost_rate * kilograms); //time to wait in minutes
-            break;
-        default: //invalid number of kilograms
+	} 
+        else{ //invalid number of kilograms
             LCD_vidClearScreen();
             LCD_vidWriteString("Err", strlen("Err")  );
             systick_vidDelay(2000);
