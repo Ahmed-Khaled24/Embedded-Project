@@ -131,6 +131,23 @@ double MinToTimerStandard(double number) { /*
 	return result;
 }
 
+
+// Returns the length of the String to compensate for strlen
+int String_Size(char String[]) {  
+	int i = 0;
+	while (string[i] != '\0') { // Checking for null character at the end of the string
+		i++; // length counter
+	};
+	return i;
+}
+
+
+
+
+
+
+
+
 void LCD_vidCountDown(double timer) {
 // you have to input the time as minutesSeconds, ex: 1234 is 12 minutes 34 seconds , 123 is 1 minutes 23 seconds
 // or as a minutes only format as its converted by the MinToTimerStandard function ex:4.5 becomes 430
@@ -144,10 +161,10 @@ void LCD_vidCountDown(double timer) {
 	char StringMin[20], StringSec[20]; 					// create the strings that are going to be outputted on the LCD
 	sprintf(StringMin, "%d", min); 						// coverts the current minutes to string to be written on LCD
 	sprintf(StringSec,"%d", sec); 						// coverts the current seconds to string to be written on LCD
-	while (atoi(StringMin) >= 0) { 						// keeps looping till the minutes reach 0
-		while (atoi(StringSec) >= 1) { 					// keeps looping till the seconds reach 0
+	while (String_To_Int(StringMin) >= 0) { 						// keeps looping till the minutes reach 0
+		while (String_To_Int(StringSec) >= 1) { 					// keeps looping till the seconds reach 0
 			sprintf(StringMin, "%d", min);
-			LCD_vidWriteString(StringMin, strlen(StringMin));
+			LCD_vidWriteString(StringMin, String_Size(StringMin));
 			LCD_vidWriteChar(':');
 			if (sec < 10) { // If the seconds are in the units write a 0 before it
 				LCD_vidWriteChar('0');
@@ -157,7 +174,7 @@ void LCD_vidCountDown(double timer) {
 			}
 			else { // If not write the string normally
 				sprintf(StringSec, "%d", sec); 
-				LCD_vidWriteString(StringSec, strlen(StringSec));
+				LCD_vidWriteString(StringSec, String_Size(StringSec));
 			}
 			
 			systick_vidDelay(1000); 					//wait a second to decrement a unit digit in the seconds
