@@ -1,6 +1,6 @@
 #include "stdint.h"
-#include "tm4c123gh6pm.h"
-#include "Systick.h"
+#include "../GPIO/tm4c123gh6pm.h"
+#include "../Systick/Systick.h"
 
 
 

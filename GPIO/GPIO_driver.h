@@ -36,7 +36,7 @@ for  pin:		GPIO_u8GetPinValue(u8PortNumberCpy,u8PinNumberCpy);
 #ifndef GPIO_DRIVER_H
 #define GPIO_DRIVER_H
 
-#include "TM4C123GH6PM.h"
+#include "tm4c123gh6pm.h"
 #include <stdint.h>
 #include "Macros.h"
 
