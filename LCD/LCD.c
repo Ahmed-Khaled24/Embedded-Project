@@ -143,13 +143,14 @@ void LCD_vidCountDown(double timer); // prototype.
 void LCD_vidCountDown(double timer) {
 // you have to input the time as minutesSeconds, ex: 1234 is 12 minutes 34 seconds , 123 is 1 minutes 23 seconds
 // or as a minutes only format as its converted by the MinToTimerStandard function ex:4.5 becomes 430
-
+	uint16_t min, sec;
+	
 	if ((timer - (uint16_t)timer) != 0) {
 		timer = MinToTimerStandard(timer);
 	}
 
 
-	uint16_t min = timer / 100, sec = (uint16_t)timer % 100; 		// divide the lower 2 digits to seconds and upper 2 digits to minutes
+	min = timer / 100, sec = (uint16_t)timer % 100; 		// divide the lower 2 digits to seconds and upper 2 digits to minutes
 					
 	while (min != -1) { 						// keeps looping till the minutes reach 0
 		while (sec != -1) { 					// keeps looping till the seconds reach 0
@@ -206,7 +207,9 @@ uint16_t LCD_u16TakeInput(void) {
 	 Important note(2): the 4-digit input must be less than or equal 3000, if bigger 
 	 the function returns 0.
 */
-	
+		uint16_t timerInt = 0;
+	 	uint8_t i;
+		char currentInput;
 	// Create a timer.
 	char timer[4] = {'0', '0', '0', '0'};
 
@@ -217,7 +220,7 @@ uint16_t LCD_u16TakeInput(void) {
 	printTimer(timer);
 
 	// Loop 4 times to read from the keypad.
-	uint8_t i;
+
 	for (i = 0; i < 4; i++) {
 		uint8_t pressedButton = '\0';
 		
@@ -227,7 +230,7 @@ uint16_t LCD_u16TakeInput(void) {
 		}
 
 		// Convert pressedButton to char to print on the screen, then add it to the right most cell in the timer.
-		char currentInput = pressedButton + '0';
+		currentInput = pressedButton + '0';
 		timer[3] = currentInput;
 
 		// Print the timer with the new input on the LCD. 
@@ -244,7 +247,6 @@ uint16_t LCD_u16TakeInput(void) {
 	}
 
 	// Extract the return value from the timer array.
-	uint16_t timerInt = 0;
 	for (i = 0; i < 4; i++) {
 		uint16_t currentDigit = timer[i] - '0';
 		if (i == 0)
