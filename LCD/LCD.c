@@ -136,24 +136,16 @@ double MinToTimerStandard(double number) { /*
 }
 
 
-// Returns the length of the String to compensate for strlen
-uint16_t String_Size(char string[]) // prototype.
-uint16_t String_Size(char string[]) {
-	int i = 0;
-	while (string[i] != '\0') { // Checking for null character at the end of the string
-		i++; // length counter
-	};
-	return i;
-}
+
 
 // Return the int value of the string to compensate for atoi() 
 uint16_t String_To_Int(char string[]) // prototype.
 uint16_t String_To_Int(char string[]) {
 	uint16_t myInt = 0;
-	uint16_t i = 0
+	uint16_t i = 0;
 	for (i  ; i < String_Size(string); i++) { // loop the string 
 		myInt += string[i] - '0'; // add the character then multiply by 10 to add the next character in the next position
-		if(i != String_Size(string) -1 ) myInt *= 10; // the if condition to prevent the last 0.
+		if(i != strlen(string) -1 ) myInt *= 10; // the if condition to prevent the last 0.
 	}
 	return myInt;
 }
@@ -198,7 +190,7 @@ void LCD_vidCountDown(double timer) {
 	while (String_To_Int(StringMin) >= 0) { 						// keeps looping till the minutes reach 0
 		while (String_To_Int(StringSec) >= 1) { 					// keeps looping till the seconds reach 0
 			Int_To_String(StringMin, min);
-			LCD_vidWriteString(StringMin, String_Size(StringMin));
+			LCD_vidWriteString(StringMin, strlen(StringMin));
 			LCD_vidWriteChar(':');
 			if (sec < 10) { // If the seconds are in the units write a 0 before it
 				LCD_vidWriteChar('0');
@@ -206,7 +198,7 @@ void LCD_vidCountDown(double timer) {
 			}
 			else { // If not write the string normally
 				Int_To_String(StringSec, sec);
-				LCD_vidWriteString(StringSec, String_Size(StringSec));
+				LCD_vidWriteString(StringSec, strlen(StringSec));
 			}
 			
 			systick_vidDelay(1000); 					//wait a second to decrement a unit digit in the seconds
