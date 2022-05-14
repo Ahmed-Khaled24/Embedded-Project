@@ -9,6 +9,7 @@
 #ifndef KEYPAD_INTERFACE_H_
 #define KEYPAD_INTERFACE_H_
 
+#include <stdint.h>
 void KEYPAD_init(void);
 uint8_t KEYPAD_u8GetButton(void);
 

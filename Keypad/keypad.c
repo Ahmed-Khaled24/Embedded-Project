@@ -7,14 +7,14 @@
 
 #include <stdint.h>// for standerd types 
 #include "../GPIO/GPIO_driver.h" 
-#include "KEYPAD_configration.h"
-#include "Keypad_private.h"
+#include "Keypad_configration.h"
+#include "keypad_private.h"
 #include "Keypad_interface.h"
 
 
 void KEYPAD_init(void)
 {
-#if ( KEYPAD_u8PULLUP == KEYPAD_u8_INTERNAL)
+#if ( KEYPAD_u8PULLUP == KEYPAD_u8INTERNAL)
 	//make all culoms =1
 
 	GPIO_DIO_vidPinInit(KEYPAD_u8COL1_PORT, KEYPAD_u8COL1);// intiate for pins 
@@ -93,7 +93,7 @@ uint8_t KEYPAD_u8GetButton(void)// in KEYPAD_interface that i didn't make yet
 	if (Button != '\0')return Button;
 
 	/*Apply sequence 1 */
-	;
+	
 	GPIO_vidSetPinValue(KEYPAD_u8COL1_PORT, KEYPAD_u8COL1, 1);
 
 	GPIO_vidSetPinValue(KEYPAD_u8COL2_PORT, KEYPAD_u8COL2, 0);
