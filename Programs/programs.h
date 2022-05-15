@@ -14,7 +14,8 @@
 #include "../Keypad/Keypad_configration.h"
 #define BEEF_DEFROST_RATE 0.5
 #define CHICKEN_DEFROST_RATE 0.2
-
+uint8_t InterruptKey = 0 ; //if zero then there is no interrupt, if 1 then there is interrupt
+void Program_Interrupt(); //for interrupt conditions
 void Program_A() ; //for popcorn
 void Program_B_or_C(uint8_t key); //for beef and chicken
 void Program_D(); //for others
