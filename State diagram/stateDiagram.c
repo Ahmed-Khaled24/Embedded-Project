@@ -100,7 +100,12 @@ void  Pause_State()
 
 void Weight_Entry_State()
 {
-    if(Illegal_Weight == 0) //if the weight is entered correctly go to cooking state
+    if(SW1 == 1) //if SW1 is pressed (interrupt) go to pause state
+    {
+        state_ptr = Pause_State();
+        state_ptr();
+    }
+    else if(Illegal_Weight == 0) //if the weight is entered correctly go to cooking state
     {
         state_ptr = Cooking_State ;
         state_ptr() ;
@@ -114,7 +119,12 @@ void Weight_Entry_State()
 
 void  Time_Entry_State()
 {
-    if(SW2 == 1 ) //if SW2 is pressed  go to cooking state
+    if(SW1 == 1) //if SW1 is pressed (interrupt) go to pause state
+    {
+        state_ptr = Pause_State();
+        state_ptr();
+    }
+    else if(SW2 == 1 ) //if SW2 is pressed  go to cooking state
     {
         state_ptr = Cooking_State ;
         state_ptr() ;
@@ -124,14 +134,3 @@ void  Time_Entry_State()
         state_ptr() ;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
