@@ -91,13 +91,14 @@ void Turn_off_LEDs() //turn off the Three LEDs
    for(i = 1 ; i<= 3 ; i++ )
      GPIO_vidSetPinValue(GPIO_PORTF ,i , Low) ;
 }
-void tuneBuzzer(uint8_t u8PortNumberCpy , uint8_t u8PinNumberCpy,uint32_t u32FreqCpy_Hz, uint32_t u32TimeCpy_ms) //buzzer function explained in the header
+void tuneBuzzer(void) //buzzer function explained in the header
 {
-	static uint8_t inst = 0;
-	uint8_t i;
-	for(i = 0; i < ((u32TimeCpy_ms*u32FreqCpy_Hz*2)/1000);i++){
-		GPIO_vidSetPinValue(u8PortNumberCpy, u8PinNumberCpy, inst);
-		inst ^= 1;
-		systick_vidDelay(1/(u32FreqCpy_Hz/1000));
+	
+	uint16_t i;
+	for(i = 0; i < 1000;i++){
+		GPIO_vidSetPinValue(GPIO_PORTF,2,1);
+		systick_vidDelay(1);
+		GPIO_vidSetPinValue(GPIO_PORTF,2,0);
+		systick_vidDelay(1);
 	}
 }
