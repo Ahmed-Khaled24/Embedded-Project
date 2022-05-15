@@ -2,7 +2,21 @@
     author : Mina Mounir Farid
 */
 #include "programs.h"
-
+void Program_Interrupt() 
+{
+    while(1) //pause loop
+    {
+           GPIO_PORTF_DATA_R ^= 0x0E; //blinking leds
+           systick_vidDelay(2000);
+         if(GPIO_u8GetPinValue(GPIO_PORTF,4) == Low) //if SW1 is pressed again
+        {
+            InterruptKey = 1 ; //set the interruptKey
+           Program_Finish(); //call the finish program which will terminate the cooking process
+         }
+         if(GPIO_u8GetPinValue(GPIO_PORTF,0) == Low && GPIO_u8GetPinValue(GPIO_PORTE,0) == High ) //if SW2 is pressed again resume cooking and door is closed 
+            break;
+    }
+}
 void Program_A()
 {
      LCD_vidWriteString("Popcorn", strlen("Popcorn")); //display popcorn on LCD
@@ -26,8 +40,8 @@ Repeat:  if(key == KEYPAD_u8R2C4) //in case keypad button 'B' is pressed ,
             defrost_rate =  CHICKEN_DEFROST_RATE ; //set the defrost_rate to be 0.2
          }
          kilograms = KEYPAD_u8GetButton(); //the button entered represents the number of kilograms
-        if(kilograms >= 1 && kilograms <=9)
-	{	
+        if( kilograms >= 1 && kilograms <=9 )
+	{
            //any integer between 1 and 9 is accepted
             LCD_vidClearScreen();
             LCD_vidWriteChar(kilograms) ; //write the number of kilograms entered
@@ -36,7 +50,7 @@ Repeat:  if(key == KEYPAD_u8R2C4) //in case keypad button 'B' is pressed ,
             Turn_on_LEDs() ;
             LCD_vidClearScreen();
             LCD_vidCountDown(defrost_rate * kilograms); //time to wait in minutes
-	} 
+	}
         else{ //invalid number of kilograms
             LCD_vidClearScreen();
             LCD_vidWriteString("Err", strlen("Err")  );
@@ -69,8 +83,13 @@ void Program_Finish() //terminating program of the microwave. this is always exe
         {
             Turn_on_LEDs(); //turning the LEDs on and off should make them blink
             Turn_off_LEDs();
-            tuneBuzzer(GPIO_PORTE , 1 ,1000 , 1000); //sound the buzzer and wait for 1 second between blinking periods
+            tuneBuzzer(); //sound the buzzer and wait for 1 second between blinking periods
          }
+    if(InterruptKey == 1)
+    {
+        LCD_vidWriteString("cooking stopped\nplease press reset button to start again" ,strlen("cooking stopped\nplease press reset button to start again") );
+        SYSCTL_RCGCGPIO_R = 0 ; //deactivate all ports
+     }
 
 }
 uint8_t Oven_Ready() //to check if door is closed and SW2 is pressed(cooking conditions)
@@ -93,7 +112,7 @@ void Turn_off_LEDs() //turn off the Three LEDs
 }
 void tuneBuzzer(void) //buzzer function explained in the header
 {
-	
+
 	uint16_t i;
 	for(i = 0; i < 1000;i++){
 		GPIO_vidSetPinValue(GPIO_PORTF,2,1);
