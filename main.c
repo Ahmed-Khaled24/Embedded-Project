@@ -10,6 +10,8 @@ int main()
     systick_vidInit() ; //initialize the systick timer ;
     LCD_vidScreenInit(); //initialize the LCD
     KEYPAD_init(); //intialize the keypad
+    Interrupt_init(0);
+	GPIOF_Handler(onInt);
     for(i = GPIO_PORTA ; i <= GPIO_PORTF ; i++ ) //activate all ports
             GPIO_DIO_vidPortInit(i);
     while(1) //program active all the time
