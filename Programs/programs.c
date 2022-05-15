@@ -10,8 +10,7 @@ void Program_Interrupt()
            systick_vidDelay(2000);
          if(GPIO_u8GetPinValue(GPIO_PORTF,4) == Low) //if SW1 is pressed again
         {
-            InterruptKey = 1 ; //set the interruptKey
-           Program_Finish(); //call the finish program which will terminate the cooking process
+            NVIC_SystemReset(); //terminate cooking process
          }
          if(GPIO_u8GetPinValue(GPIO_PORTF,0) == Low && GPIO_u8GetPinValue(GPIO_PORTE,0) == High ) //if SW2 is pressed again resume cooking and door is closed 
             break;
@@ -85,11 +84,7 @@ void Program_Finish() //terminating program of the microwave. this is always exe
             Turn_off_LEDs();
             tuneBuzzer(); //sound the buzzer and wait for 1 second between blinking periods
          }
-    if(InterruptKey == 1)
-    {
-        LCD_vidWriteString("cooking stopped\nplease press reset button to start again" ,strlen("cooking stopped\nplease press reset button to start again") );
-        SYSCTL_RCGCGPIO_R = 0 ; //deactivate all ports
-     }
+    
 
 }
 uint8_t Oven_Ready() //to check if door is closed and SW2 is pressed(cooking conditions)
