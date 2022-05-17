@@ -1,4 +1,3 @@
-   
 /*
     author : Mina Mounir Farid
 */
@@ -25,5 +24,5 @@ void Program_Finish(void); //the finishing program is for LEDs and buzzer in the
 uint8_t Oven_Ready(void); //to check if the door is closed and SW2 is pressed
 void Turn_on_LEDs(void); //to turn on the three LEDs in the microcontroller
 void Turn_off_LEDs(void); //to turn off the three LEDs in the microcontroller
-void tuneBuzzer(void); //a function to use the buzzer 
+void tuneBuzzer(void); //a function to use the buzzer
 #endif // PROGRAMS_H_INCLUDED
