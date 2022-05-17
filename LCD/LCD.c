@@ -118,43 +118,32 @@ void LCD_vidWriteString(char* string, uint8_t stringSize) {
 }
 
 
-// The next 4 function are to be implemented in LCD_vidCountDown()
 
-// Returns the timer in standard form (minutes seconds)
-double MinToTimerStandard(double number); // prototype.
-double MinToTimerStandard(double number) { /* 
-	this function will be used in the countdown function
-	It converts from minutes only to minutes and second form to be put in countdown function 
-	this function's parameter must be in minutes, ex: 4.5 minutes to outpit 430 to be put in countdown method
-	*/
 
-	int min = (int)number; // taking the integer part
-	double sec = (number - (double)min) * 0.6; // the part after the decimal point  getting it in second then dividing by a 100
-	double result = (min + sec) * 100; // adding the integer and the decimal part then multiplying by a 100 to get the standard form 
-									  // needed in the countdown function
-	return result;
-}
+
 
 
 
 
 // Starts countdown on screen with the timer given
-void LCD_vidCountDown(double timer); // prototype.
-void LCD_vidCountDown(double timer) {
+void LCD_vidCountDown(int16_t timer , uint8_t StandardForm); // prototype.
+void LCD_vidCountDown(int16_t timer, uint8_t isStandardForm) {
 // you have to input the time as minutesSeconds, ex: 1234 is 12 minutes 34 seconds , 123 is 1 minutes 23 seconds
 // or as a minutes only format as its converted by the MinToTimerStandard function ex:4.5 becomes 430
-	uint16_t min, sec;
-	
-	if ((timer - (uint16_t)timer) != 0) {
-		timer = MinToTimerStandard(timer);
+	int8_t min, sec;
+	if (isStandardForm == 0) {
+		timer = ((timer / 60) * 100) + (timer % 60); // Converting the seconds form to standard form needed here.
+	}
+	else {
+
 	}
 
 
-	min = timer / 100, sec = (uint16_t)timer % 100; 		// divide the lower 2 digits to seconds and upper 2 digits to minutes
+	min = timer / 100, sec = (int16_t)timer % 100; 		// divide the lower 2 digits to seconds and upper 2 digits to minutes
 					
-	while (min != -1) { 						// keeps looping till the minutes reach 0
-		while (sec != -1) { 					// keeps looping till the seconds reach 0
-			uint16_t temp = min;
+	while (min > -1) { 						// keeps looping till the minutes reach 0
+		while (sec > -1) { 					// keeps looping till the seconds reach 0
+			int8_t temp = min;
 			LCD_vidWriteChar((temp / 10) + '0');
 			LCD_vidWriteChar((temp % 10) + '0');
 			LCD_vidWriteChar(':');
@@ -163,7 +152,7 @@ void LCD_vidCountDown(double timer) {
 				LCD_vidWriteChar(sec + '0');
 			}
 			else { // If not write the string normally
-				uint16_t temp = sec;
+				int8_t temp = sec;
 				LCD_vidWriteChar((temp / 10) + '0');
 					LCD_vidWriteChar((temp % 10) + '0');
 
