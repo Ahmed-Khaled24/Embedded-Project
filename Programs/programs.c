@@ -2,6 +2,20 @@
     author : Mina Mounir Farid
 */
 #include "programs.h"
+void External_Button_Init() 
+{
+    GPIO_DIO_vidPinInit(GPIO_PORTE , 0)
+    GPIO_vidSetPinDirection(GPIO_PORTE, 0, 0); //input
+    GPIO_vidSetPinPullUpRes(GPIO_PORTE, 0, 1);//activate pull up resistor of pin
+
+}
+
+void Buzzer_Init() 
+{
+    GPIO_DIO_vidPinInit(GPIO_PORTB , 3)
+    GPIO_vidSetPinDirection(GPIO_PORTB, 3, 1); //output
+    
+} 
 void Program_Interrupt() 
 {
     while(1) //pause loop
