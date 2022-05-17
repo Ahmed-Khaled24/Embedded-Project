@@ -10,10 +10,12 @@
 #include "Keypad_configration.h"
 #include "keypad_private.h"
 #include "Keypad_interface.h"
+#include "../Systick/Systick.h"
 
-
+static uint8_t i = 0;
 void KEYPAD_init(void)
 {
+	i = 0;
 #if ( KEYPAD_u8PULLUP == KEYPAD_u8INTERNAL)
 	//make all culoms =1
 
@@ -77,8 +79,10 @@ void KEYPAD_init(void)
 
 uint8_t KEYPAD_u8GetButton(void)// in KEYPAD_interface that i didn't make yet
 {
+	
 		uint8_t Button = '\0'; // set unsigned 8 bit to null
 
+	
 	/*Apply sequence 0 */
 	
 	GPIO_vidSetPinValue(KEYPAD_u8COL1_PORT, KEYPAD_u8COL1, 0);
@@ -90,8 +94,13 @@ uint8_t KEYPAD_u8GetButton(void)// in KEYPAD_interface that i didn't make yet
 	GPIO_vidSetPinValue(KEYPAD_u8COL4_PORT, KEYPAD_u8COL4, 1);
 
 	Button = KeyPad_u8CheckRow(0);
-	if (Button != '\0')return Button;
-
+	if (Button != '\0'){
+		if(i == 1){
+			return '\0';
+		}
+		i=1;
+		return Button;
+	}
 	/*Apply sequence 1 */
 	
 	GPIO_vidSetPinValue(KEYPAD_u8COL1_PORT, KEYPAD_u8COL1, 1);
@@ -103,7 +112,13 @@ uint8_t KEYPAD_u8GetButton(void)// in KEYPAD_interface that i didn't make yet
 	GPIO_vidSetPinValue(KEYPAD_u8COL4_PORT, KEYPAD_u8COL4, 1);
 
 	Button = KeyPad_u8CheckRow(1);
-	if (Button != '\0')return Button;
+	if (Button != '\0'){
+		if(i == 1){
+			return '\0';
+		}
+		i=1;
+		return Button;
+	}
 
 	/*Apply sequence 2 */
 
@@ -116,7 +131,13 @@ uint8_t KEYPAD_u8GetButton(void)// in KEYPAD_interface that i didn't make yet
 	GPIO_vidSetPinValue(KEYPAD_u8COL4_PORT, KEYPAD_u8COL4, 1);
 
 	Button = KeyPad_u8CheckRow(2);
-	if (Button != '\0')return Button;
+	if (Button != '\0'){
+		if(i == 1){
+			return '\0';
+		}
+		i=1;
+		return Button;
+	}
 
 	/*Apply sequence 3 */
 	
@@ -129,6 +150,15 @@ uint8_t KEYPAD_u8GetButton(void)// in KEYPAD_interface that i didn't make yet
 	GPIO_vidSetPinValue(KEYPAD_u8COL4_PORT, KEYPAD_u8COL4, 0);
 
 	Button = KeyPad_u8CheckRow(3);
+	
+	if (Button != '\0'){
+		if(i == 1){
+			return '\0';
+		}
+		i=1;
+		return Button;
+	}
+	i=0;
 	return Button;
 }
 
@@ -141,19 +171,19 @@ static uint8_t KeyPad_u8CheckRow(uint8_t COL)
 		{
 		case 0:
 			return KEYPAD_u8R1C1;
-			break;
+			
 
 		case 1:
 			return KEYPAD_u8R1C2;
-			break;
+			
 
 		case 2:
 			return KEYPAD_u8R1C3;
-			break;
+			
 
 		case 3:
 			return KEYPAD_u8R1C4;
-			break;
+			
 		}
 	}
 	if (GPIO_u8GetPinValue(KEYPAD_u8ROW2_PORT, KEYPAD_u8ROW2) == 0)
@@ -162,19 +192,19 @@ static uint8_t KeyPad_u8CheckRow(uint8_t COL)
 		{
 		case 0:
 			return KEYPAD_u8R2C1;
-			break;
+			
 
 		case 1:
 			return KEYPAD_u8R2C2;
-			break;
+			
 
 		case 2:
 			return KEYPAD_u8R2C3;
-			break;
+			
 
 		case 3:
 			return KEYPAD_u8R2C4;
-			break;
+			
 		}
 	}
 	if (GPIO_u8GetPinValue(KEYPAD_u8ROW3_PORT, KEYPAD_u8ROW3) == 0)
@@ -183,19 +213,19 @@ static uint8_t KeyPad_u8CheckRow(uint8_t COL)
 		{
 		case 0:
 			return KEYPAD_u8R3C1;
-			break;
+			
 
 		case 1:
 			return KEYPAD_u8R3C2;
-			break;
+			
 
 		case 2:
 			return KEYPAD_u8R3C3;
-			break;
+			
 
 		case 3:
 			return KEYPAD_u8R3C4;
-			break;
+			
 		}
 	}
 	if (GPIO_u8GetPinValue(KEYPAD_u8ROW4_PORT, KEYPAD_u8ROW4) == 0)
@@ -204,19 +234,19 @@ static uint8_t KeyPad_u8CheckRow(uint8_t COL)
 		{
 		case 0:
 			return KEYPAD_u8R4C1;
-			break;
+			
 
 		case 1:
 			return KEYPAD_u8R4C2;
-			break;
+			
 
 		case 2:
 			return KEYPAD_u8R4C3;
-			break;
+			
 
 		case 3:
 			return KEYPAD_u8R4C4;
-			break;
+			
 		}
 	}
 
