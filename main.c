@@ -8,19 +8,19 @@ int main()
 {
     uint8_t choice;
     systick_vidInit() ; //initialize the systick timer ;
-    GPIO_DIO_vidPortInit(GPIO_PORTF); //initialize portF
-    GPIO_vidSetPortDirection(GPIO_PORTF,0xE);
-    GPIO_vidSetPortPullUpRes(GPIO_PORTF,0x11);
+	GPIO_DIO_vidPortInit(GPIO_PORTF); //initialize portF
+	GPIO_vidSetPortDirection(GPIO_PORTF,0xE);
+	GPIO_vidSetPortPullUpRes(GPIO_PORTF,0x11);
     LCD_vidScreenInit(); //initialize the LCD
     KEYPAD_init(); //initialize the keypad
     Interrupt_init(4); //initialize the interrupt
     GPIOF_setHandler(Program_Interrupt); //set the interrupt handler to Program_Interrupt function
     External_Button_Init(); //initialize the external button
     Buzzer_Init(); //intialize the buzzer
-
     while(1) //program active all the time
     {
-		choice = KEYPAD_u8GetButton();
+        LCD_vidWriteString("Choose program (A-B-C-D)",strlen("Choose program (A-B-C-D)"));
+      	choice = KEYPAD_u8GetButton();
         switch(choice) //keypad input from the user to choose which program to execute
         {
             case 'A': //if user presses on key A then  make microwave execute  Program_A for popcorn
@@ -35,9 +35,7 @@ int main()
             case  'D': //if user presses on key D then  make microwave execute  Program_D for other food
                     Program_D() ;
                     break;
-
-        }
-
+        }       
     }
-
+    
 }
