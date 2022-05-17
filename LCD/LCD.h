@@ -21,7 +21,7 @@ void LCD_vidWriteChar(char c);
 void LCD_vidWriteString(char* string, uint8_t stringSize);
 
 // Countdown timer 
-void LCD_vidCountDown(double timer);
+void LCD_vidCountDown(int16_t timer, uint8_t isStandardForm);
 
 // Take 4-digit input from the user and return the input.
 uint16_t LCD_u16TakeInput(void);
