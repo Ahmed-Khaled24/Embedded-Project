@@ -6,7 +6,7 @@
 #include<stdint.h>
 
 // Send command to the LCD
-void LCD_vidSendCommand(unsigned char command);
+void LCD_vidSendCommand(uint8_t command);
 
 // Initialize the LCD
 void LCD_vidScreenInit(void);

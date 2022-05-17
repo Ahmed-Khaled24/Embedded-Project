@@ -6,11 +6,11 @@
 #include "LCD_configuration.h"
 
 
-void LCD_vidSendCommand(unsigned char command) {
+void LCD_vidSendCommand(uint8_t command) {
 	// Select to write on command register [RS = 0]
 	// According to datasheet time digram a delay of 40ns should be applied before set E = 1.
 	GPIO_vidSetPinValue(LCD_PRS_PORT, LCD_PRS, Low);
-	systick_vid1MicroDelay();
+	systick_vid1msDelay();
 
 	// Apply the command bits to data bits D0->D7 of the LCD.
 	// According to datasheet time digram a delay of 80ns should be applied before the falling edge of E.
@@ -22,16 +22,16 @@ void LCD_vidSendCommand(unsigned char command) {
 	GPIO_vidSetPinValue(LCD_PD5_PORT, LCD_PD5, ((command >> 5) & 0x1));
 	GPIO_vidSetPinValue(LCD_PD6_PORT, LCD_PD6, ((command >> 6) & 0x1));
 	GPIO_vidSetPinValue(LCD_PD7_PORT, LCD_PD7, ((command >> 7) & 0x1));
-	systick_vid1MicroDelay() ;
+	systick_vid1msDelay();
 
 	// Create falling edge for the write operation to start
 	// According to datasheet time digram the pulse width must be greater than 230ns
 	// [E] --> Low to High
 	GPIO_vidSetPinValue(LCD_PE_PORT, LCD_PE, High);
-	systick_vid1MicroDelay();
+	systick_vid1msDelay();
 	// [E] --> High to Low
 	GPIO_vidSetPinValue(LCD_PE_PORT, LCD_PE, Low);
-	systick_vid1MicroDelay();
+	systick_vid1msDelay();
 
 	// If the command is ClearScreen or ResetCursor it will take 1.64ms to apply the command so,
 	// a delay of 2ms should be applied, and for any other command it will take 40 microsecond.
@@ -86,7 +86,7 @@ void LCD_vidClearScreen(void) {
 void LCD_vidWriteChar(char c) {
 	//set RS for data registers (Read/write) and wait for delay
 	GPIO_vidSetPinValue(LCD_PRS_PORT, LCD_PRS, High);
-	systick_vid1MicroDelay();
+	systick_vid1msDelay();
 
 	//add character bits inputted in the pins D0 -> D7 and wait for delay
 	GPIO_vidSetPinValue(LCD_PD0_PORT, LCD_PD0, ((c) & 0x1));
@@ -97,16 +97,16 @@ void LCD_vidWriteChar(char c) {
 	GPIO_vidSetPinValue(LCD_PD5_PORT, LCD_PD5, ((c >> 5) & 0x1));
 	GPIO_vidSetPinValue(LCD_PD6_PORT, LCD_PD6, ((c >> 6) & 0x1));
 	GPIO_vidSetPinValue(LCD_PD7_PORT, LCD_PD7, ((c >> 7) & 0x1));
-	systick_vid1MicroDelay();
+	systick_vid1msDelay();
 
 	// Create falling edge for the write operation to start
     // According to datasheet time digram the pulse width must be greater than 230ns
     // [E] --> Low to High
 	GPIO_vidSetPinValue(LCD_PE_PORT, LCD_PE, High);
-	systick_vid1MicroDelay();
+	systick_vid1msDelay();
 	// [E] --> High to Low
 	GPIO_vidSetPinValue(LCD_PE_PORT, LCD_PE, Low);
-	systick_vid1MicroDelay();
+	systick_vid1msDelay();
 }
 
 void LCD_vidWriteString(char* string, uint8_t stringSize) {
@@ -117,16 +117,7 @@ void LCD_vidWriteString(char* string, uint8_t stringSize) {
 	}
 }
 
-
-
-
-
-
-
-
-
 // Starts countdown on screen with the timer given
-void LCD_vidCountDown(int16_t timer , uint8_t StandardForm); // prototype.
 void LCD_vidCountDown(int16_t timer, uint8_t isStandardForm) {
 // you have to input the time as minutesSeconds, ex: 1234 is 12 minutes 34 seconds , 123 is 1 minutes 23 seconds
 // or as a minutes only format as its converted by the MinToTimerStandard function ex:4.5 becomes 430
@@ -134,8 +125,6 @@ void LCD_vidCountDown(int16_t timer, uint8_t isStandardForm) {
 	if (isStandardForm == 0) {
 		timer = ((timer / 60) * 100) + (timer % 60); // Converting the seconds form to standard form needed here.
 	}
-
-
 
 	min = timer / 100, sec = (int16_t)timer % 100; 		// divide the lower 2 digits to seconds and upper 2 digits to minutes
 					
