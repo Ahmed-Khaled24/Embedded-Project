@@ -1,3 +1,4 @@
+   
 /*
     author : Mina Mounir Farid
 */
@@ -14,7 +15,8 @@
 #include "../Keypad/Keypad_configration.h"
 #define BEEF_DEFROST_RATE 0.5
 #define CHICKEN_DEFROST_RATE 0.2
-
+void Buzzer_Init(); // to intialize the buzzer
+void External_Button_Init(); // to intialize the push button
 void Program_Interrupt(); //for interrupt conditions
 void Program_A() ; //for popcorn
 void Program_B_or_C(uint8_t key); //for beef and chicken
