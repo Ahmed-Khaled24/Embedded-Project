@@ -110,9 +110,9 @@ void tuneBuzzer(void) //buzzer function explained in the header
 
 	uint16_t i;
 	for(i = 0; i < 1000;i++){
-		GPIO_vidSetPinValue(GPIO_PORTF,2,1);
+		GPIO_vidSetPinValue(GPIO_PORTB,3,1);
 		systick_vidDelay(1);
-		GPIO_vidSetPinValue(GPIO_PORTF,2,0);
+		GPIO_vidSetPinValue(GPIO_PORTB,3,0);
 		systick_vidDelay(1);
 	}
 }
