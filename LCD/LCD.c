@@ -134,9 +134,7 @@ void LCD_vidCountDown(int16_t timer, uint8_t isStandardForm) {
 	if (isStandardForm == 0) {
 		timer = ((timer / 60) * 100) + (timer % 60); // Converting the seconds form to standard form needed here.
 	}
-	else {
 
-	}
 
 
 	min = timer / 100, sec = (int16_t)timer % 100; 		// divide the lower 2 digits to seconds and upper 2 digits to minutes
