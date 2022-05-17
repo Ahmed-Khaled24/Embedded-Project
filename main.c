@@ -14,7 +14,7 @@ int main()
     GPIOF_setHandler(Program_Interrupt)); //set the interrupt handler to Program_Interrupt function
     External_Button_Init() //initialize the external button
     Buzzer_Init(); //intialize the buzzer
-    
+    GPIO_DIO_vidPortInit(GPIO_PORTF); //initialize portF
     while(1) //program active all the time
     {
         switch(KEYPAD_u8GetButton()) //keypad input from the user to choose which program to execute
