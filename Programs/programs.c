@@ -2,9 +2,10 @@
     author : Mina Mounir Farid
 */
 #include "programs.h"
+#include "tm4c123.h"
 void External_Button_Init() 
 {
-    GPIO_DIO_vidPinInit(GPIO_PORTE , 0)
+    GPIO_DIO_vidPinInit(GPIO_PORTE , 0);
     GPIO_vidSetPinDirection(GPIO_PORTE, 0, 0); //input
     GPIO_vidSetPinPullUpRes(GPIO_PORTE, 0, 1);//activate pull up resistor of pin
 
@@ -12,7 +13,7 @@ void External_Button_Init()
 
 void Buzzer_Init() 
 {
-    GPIO_DIO_vidPinInit(GPIO_PORTB , 3)
+    GPIO_DIO_vidPinInit(GPIO_PORTB , 3);
     GPIO_vidSetPinDirection(GPIO_PORTB, 3, 1); //output
     
 } 
@@ -35,21 +36,22 @@ void Program_A()
      LCD_vidWriteString("Popcorn", strlen("Popcorn")); //display popcorn on LCD
      while(Oven_Ready() == 0) ; //wait until oven is ready (door closed and SW2 pressed)
      Turn_on_LEDs() ;
-     LCD_vidCountDown(100); //wait for 1 minute (input entered in format (1:00)
+     LCD_vidCountDown(100,1); //wait for 1 minute (input entered in format (1:00)
+		Program_Finish() ; //finsihing  program for microwave
 }
 
 void Program_B_or_C(uint8_t key) //this program works for choices B or C
 {
-        double defrost_rate ; //in minutes per kilogram
+        uint8_t defrost_rate ; //in minutes per kilogram
         uint16_t kilograms ; //in kilograms
-Repeat:  if(key == KEYPAD_u8R2C4) //in case keypad button 'B' is pressed ,
+Repeat:  if(key == 'B') //in case keypad button 'B' is pressed ,
         {
-            LCD_vidWriteString("Beef Weight?" , strlen("Beef Weight") ); //then display the beef weight
+            LCD_vidWriteString("Beef Weight?" , strlen("Beef Weight?") ); //then display the beef weight
             defrost_rate = BEEF_DEFROST_RATE; //set the defrost_rate to be 0.5
         }
-        else if(key == KEYPAD_u8R2C4) //in case keypad button 'C' is pressed ,
+        else if(key == 'C') //in case keypad button 'C' is pressed ,
         {
-            LCD_vidWriteString("Chicken Weight?" , strlen("Beef Weight")); //then display the beef weight
+            LCD_vidWriteString("Chicken Weight?" , strlen("Chicken Weight?")); //then display the beef weight
             defrost_rate =  CHICKEN_DEFROST_RATE ; //set the defrost_rate to be 0.2
          }
          kilograms = KEYPAD_u8GetButton(); //the button entered represents the number of kilograms
@@ -62,7 +64,7 @@ Repeat:  if(key == KEYPAD_u8R2C4) //in case keypad button 'B' is pressed ,
             while(Oven_Ready() == 0) ; //must wait until door is closed and SW2 is pressed
             Turn_on_LEDs() ;
             LCD_vidClearScreen();
-            LCD_vidCountDown(defrost_rate * kilograms); //time to wait in minutes
+            LCD_vidCountDown(defrost_rate * kilograms,0); //time to wait in seconds
 	}
         else{ //invalid number of kilograms
             LCD_vidClearScreen();
@@ -70,12 +72,14 @@ Repeat:  if(key == KEYPAD_u8R2C4) //in case keypad button 'B' is pressed ,
             systick_vidDelay(2000);
             goto Repeat ;
         }
+				Program_Finish() ; //finsihing  program for microwave
 }
 
 void Program_D() //for other kinds of food
 {
      uint16_t  timer  ;
      LCD_vidWriteString("Cooking time?", strlen("Cooking time?") );
+
     do{
         timer = LCD_u16TakeInput() ; //user must enter a valid time (1 till 30:00)
      }while(timer == 0);
@@ -83,8 +87,8 @@ void Program_D() //for other kinds of food
         LCD_vidClearScreen();
      while(Oven_Ready() == 0) ; //wait until door is closed switch 2 is pressed then the LEDs are on and the countdown starts
         Turn_on_LEDs() ;
-        LCD_vidCountDown(timer)  ;
-
+        LCD_vidCountDown(timer,1)  ;
+        Program_Finish() ; //finsihing  program for microwave
 }
 
 void Program_Finish() //terminating program of the microwave. this is always executed after programs A or B or C or D
@@ -103,7 +107,7 @@ void Program_Finish() //terminating program of the microwave. this is always exe
 }
 uint8_t Oven_Ready() //to check if door is closed and SW2 is pressed(cooking conditions)
 {
-    return ( GPIO_u8GetPinValue(GPIO_PORTE, 0) &&  GPIO_u8GetPinValue(GPIO_PORTF, 0) ) ; //external switch connected to port E pin 0 and SW2
+    return ( GPIO_u8GetPinValue(GPIO_PORTE, 0) &&  !GPIO_u8GetPinValue(GPIO_PORTF, 0) ) ; //external switch connected to port E pin 0 and SW2 (switch 3 being up and switch 2 being down)
 }
 
 void Turn_on_LEDs() //turn on the three LEDs
