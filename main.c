@@ -9,11 +9,12 @@ int main()
     uint8_t i; //loop counter
     systick_vidInit() ; //initialize the systick timer ;
     LCD_vidScreenInit(); //initialize the LCD
-    KEYPAD_init(); //intialize the keypad
-    Interrupt_init(0);
-    GPIOF_setHandler(Program_Interrupt());
-    for(i = GPIO_PORTA ; i <= GPIO_PORTF ; i++ ) //activate all ports
-            GPIO_DIO_vidPortInit(i);
+    KEYPAD_init(); //initialize the keypad
+    Interrupt_init(0); //initialize the interrupt
+    GPIOF_setHandler(Program_Interrupt)); //set the interrupt handler to Program_Interrupt function
+    External_Button_Init() //initialize the external button
+    Buzzer_Init(); //intialize the buzzer
+    
     while(1) //program active all the time
     {
         switch(KEYPAD_u8GetButton()) //keypad input from the user to choose which program to execute
