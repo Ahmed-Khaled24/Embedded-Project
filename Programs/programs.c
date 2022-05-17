@@ -40,6 +40,7 @@ void Program_Interrupt()
 }
 void Program_A()
 {
+	LCD_vidClearScreen();
      LCD_vidWriteString("Popcorn", strlen("Popcorn")); //display popcorn on LCD
      while(Oven_Ready() == 0) ; //wait until oven is ready (door closed and SW2 pressed)
      Turn_on_LEDs() ;
@@ -49,8 +50,10 @@ void Program_A()
 
 void Program_B_or_C(uint8_t key) //this program works for choices B or C
 {
+				
         uint8_t defrost_rate ; //in minutes per kilogram
         uint16_t kilograms = '\0'; //the button entered represents the number of kilograms
+	LCD_vidClearScreen();
 Repeat:  if(key == 'B') //in case keypad button 'B' is pressed ,
         {
             LCD_vidWriteString("Beef Weight?" , strlen("Beef Weight?") ); //then display the beef weight
@@ -88,7 +91,9 @@ Repeat:  if(key == 'B') //in case keypad button 'B' is pressed ,
 
 void Program_D() //for other kinds of food
 {
+	
      uint16_t  timer  ;
+	LCD_vidClearScreen();
      LCD_vidWriteString("Cooking time?", strlen("Cooking time?") );
 			LCD_vidClearScreen();
     do{
@@ -108,6 +113,7 @@ void Program_Finish() //terminating program of the microwave. this is always exe
 {
     uint8_t i;
     LCD_vidClearScreen(); //clear the LCD
+		LCD_vidWriteString("Done",4);
     Turn_off_LEDs(); //turn off the LEDs
     for(i = 0 ; i < 3 ; i++ )
         {
@@ -115,6 +121,7 @@ void Program_Finish() //terminating program of the microwave. this is always exe
             Turn_off_LEDs();
             tuneBuzzer(); //sound the buzzer and wait for 1 second between blinking periods
          }
+				LCD_vidClearScreen(); //clear the LCD
 }
 uint8_t Oven_Ready() //to check if door is closed and SW2 is pressed(cooking conditions)
 {
