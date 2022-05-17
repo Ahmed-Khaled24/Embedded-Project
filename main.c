@@ -6,41 +6,43 @@
 
 int main()
 {
-    uint8_t i; //loop counter
+    uint8_t choice;
     systick_vidInit() ; //initialize the systick timer ;
+	  GPIO_DIO_vidPortInit(GPIO_PORTF); //initialize portF
+		GPIO_vidSetPortDirection(GPIO_PORTF,0xE);
+		GPIO_vidSetPortPullUpRes(GPIO_PORTF,0x11);
     LCD_vidScreenInit(); //initialize the LCD
     KEYPAD_init(); //initialize the keypad
-    Interrupt_init(0); //initialize the interrupt
-    GPIOF_setHandler(Program_Interrupt)); //set the interrupt handler to Program_Interrupt function
-    External_Button_Init() //initialize the external button
+    Interrupt_init(4); //initialize the interrupt
+    GPIOF_setHandler(Program_Interrupt); //set the interrupt handler to Program_Interrupt function
+    External_Button_Init(); //initialize the external button
     Buzzer_Init(); //intialize the buzzer
-    GPIO_DIO_vidPortInit(GPIO_PORTF); //initialize portF
+    
     while(1) //program active all the time
     {
-        switch(KEYPAD_u8GetButton()) //keypad input from the user to choose which program to execute
+		choice = KEYPAD_u8GetButton();	
+        switch(choice) //keypad input from the user to choose which program to execute
         {
-            case KEYPAD_u8R1C4: //if user presses on key A then  make microwave execute  Program_A for popcorn
-                    Program_A("Popcorn") ;
+            case 'A': //if user presses on key A then  make microwave execute  Program_A for popcorn
+                 
+					Program_A();
                     break; //break statement prevents executing more than 1 program in a single run
-            case KEYPAD_u8R2C4: //if user presses on key B then  make microwave execute  Program_B for beef
-                    Program_B_or_C(KEYPAD_u8R2C4) ;
+            case 'B': //if user presses on key B then  make microwave execute  Program_B for beef
+                    Program_B_or_C('B') ;
                     break;
-            case KEYPAD_u8R3C4: //if user presses on key C then  make microwave execute  Program_C for chicken
-                    Program_B_or_C(KEYPAD_u8R3C4) ;
+            case 'C': //if user presses on key C then  make microwave execute  Program_C for chicken
+                    Program_B_or_C('C') ;
                     break;
-            case  KEYPAD_u8R4C4: //if user presses on key D then  make microwave execute  Program_D for other food
+            case  'D': //if user presses on key D then  make microwave execute  Program_D for other food
                     Program_D() ;
                     break;
-            default:
-                    LCD_vidWriteString("Error", strlen("Error")); //otherwise , LCD displays Error and then it clears
-                    systick_vidDelay(2000); //wait for 2 seconds
-                    LCD_vidClearScreen();
-                    continue ; //to skip entering the finishing program
+            
+                   
         }
-        Program_Finish() ; //finsihing  program for microwave
+        
     }
-
-    return 0;
+		
+    
 }
 
 
