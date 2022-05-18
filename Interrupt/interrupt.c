@@ -47,6 +47,9 @@ void GPIOF_setHandler(void (*f)(void),void (*e)(void))
 }
 void GPIOF_Handler(void)
 {	
-	F();
+	if(PN==4){
+	    F();
+	}
+	else if(PN==0){E();}//interrpt function for SW3
 	SET_BIT(GPIO_PORTF_ICR_R,PN);/* clear the interrupt flag */
 }
