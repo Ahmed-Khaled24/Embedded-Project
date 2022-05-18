@@ -118,6 +118,7 @@ void Program_Finish() //terminating program of the microwave. this is always exe
     for(i = 0 ; i < 3 ; i++ )
         {
             Turn_on_LEDs(); //turning the LEDs on and off should make them blink
+	    tuneBuzzer(); //sound the buzzer and wait for 1 second between blinking periods
             Turn_off_LEDs();
             tuneBuzzer(); //sound the buzzer and wait for 1 second between blinking periods
          }
@@ -144,7 +145,7 @@ void Turn_off_LEDs() //turn off the Three LEDs
 void tuneBuzzer(void) //buzzer function explained in the header
 {
 	uint16_t i;
-	for(i = 0; i < 1000;i++){
+	for(i = 0; i < 500;i++){
 		GPIO_vidSetPinValue(GPIO_PORTB,3,1);
 		systick_vidDelay(1);
 		GPIO_vidSetPinValue(GPIO_PORTB,3,0);
