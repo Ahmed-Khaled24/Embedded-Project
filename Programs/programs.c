@@ -83,7 +83,8 @@ Repeat:  if(key == 'B') //in case keypad button 'B' is pressed ,
             LCD_vidClearScreen();
             LCD_vidWriteString("Err", strlen("Err")  );
             systick_vidDelay(2000);
-			LCD_vidClearScreen();
+	    kilograms = '\0';
+	    LCD_vidClearScreen();
             goto Repeat ;
         }
 		Program_Finish() ; //finsihing  program for microwave
