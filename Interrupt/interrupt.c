@@ -6,6 +6,8 @@ Philopateer Moheb Fouad Barsom
 #include "Interrupt.h"
 uint8_t PN;
 void (*F)(void);
+void (*E)(void);
+
 void Interrupt_init(uint8_t pn)
 {
     PN = pn;
@@ -37,9 +39,11 @@ void Interrupt_init(uint8_t pn)
 
 /* SW1 is connected to PF4 pin, SW2 is connected to PF0. */
 /* Both of them trigger PORTF falling edge interrupt */
-void GPIOF_setHandler(void (*f)(void))
+//Adding another interrpt for pin f0 for SW3
+void GPIOF_setHandler(void (*f)(void),void (*e)(void))
 {	
 	F = f;
+	E = e;
 }
 void GPIOF_Handler(void)
 {	
