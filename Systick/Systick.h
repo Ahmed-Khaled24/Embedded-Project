@@ -5,6 +5,8 @@
 
 void systick_vidInit(void);
 void systick_vid1msDelay();
+systick_Disable();
+systick_Enable();
 void systick_vid1MicroDelay();
 void systick_vidDelay(uint32_t ms);
 
