@@ -10,7 +10,7 @@ void (*E)(void);
 
 void Interrupt_init(uint8_t pn)
 {
-    PN = pn;
+   	 PN = pn;
 	 
 	
 	GPIO_DIO_vidPinInit(GPIO_PORTF,pn);
@@ -19,19 +19,19 @@ void Interrupt_init(uint8_t pn)
     
     /* configure PORTF4, 0 for falling edge trigger interrupt */
 	CLEAR_BIT(GPIO_PORTF_IS_R,pn);/* make bit 4, 0 edge sensitive */
-  CLEAR_BIT(GPIO_PORTF_IBE_R,pn);/* trigger is controlled by IEV */
-  CLEAR_BIT(GPIO_PORTF_IEV_R,pn);/* falling edge trigger */
+  	CLEAR_BIT(GPIO_PORTF_IBE_R,pn);/* trigger is controlled by IEV */
+  	CLEAR_BIT(GPIO_PORTF_IEV_R,pn);/* falling edge trigger */
 	
 	
 	SET_BIT(GPIO_PORTF_ICR_R,pn);/* clear any prior interrupt */
-  SET_BIT(GPIO_PORTF_IM_R,pn);/* unmask interrupt */
+  	SET_BIT(GPIO_PORTF_IM_R,pn);/* unmask interrupt */
   
   
   
 
     /* enable interrupt in NVIC and set priority to 3 */
-   NVIC->IP[30] = 3 << 5;     /* set interrupt priority to 3 */
-   NVIC->ISER[0] |= (1<<30);  /* enable IRQ30 (D30 of ISER[0]) */
+   	NVIC->IP[30] = 3 << 5;     /* set interrupt priority to 3 */
+   	NVIC->ISER[0] |= (1<<30);  /* enable IRQ30 (D30 of ISER[0]) */
 
     
     
