@@ -5,31 +5,54 @@ Philopateer Moheb Fouad Barsom
 */
 #include "Interrupt.h"
 uint8_t PN;
+uint8_t PN_E;
 void (*F)(void);
 void (*E)(void);
 
-void InterruptF_init(uint8_t PORT,uint8_t pn)
+void InterruptF_init(uint8_t pn)
 {
    	 PN = pn;
-	 
-	
-	GPIO_DIO_vidPinInit(PORT,pn);
-	GPIO_vidSetPinDirection(PORT,pn,0);
-	GPIO_vidSetPinPullUpRes(PORT,pn,1);
-    
-    /* configure PORTF4, 0 for falling edge trigger interrupt*/
-	CLEAR_BIT(PORT,pn);/* make bit 4, 0 edge sensitive */
-  	CLEAR_BIT(PORT,pn);/* trigger is controlled by IEV */
-  	CLEAR_BIT(PORT,pn);/* falling edge trigger */
-	
-	
-	SET_BIT(PORT,pn);/* clear any prior interrupt */
-  	SET_BIT(PORT,pn);/* unmask interrupt */
-  
-  
+
+
+	GPIO_DIO_vidPinInit(GPIO_PORTF,pn);
+	GPIO_vidSetPinDirection(GPIO_PORTF,pn,0);
+	GPIO_vidSetPinPullUpRes(GPIO_PORTF,pn,1);
+
+    /* configure PORTF4, 0 for falling edge trigger interrupt and we will configure also PORTE pin 0 for same conditions for SW3*/
+	CLEAR_BIT(GPIO_PORTF_IS_R,pn);/* make bit 4, 0 edge sensitive */
+  	CLEAR_BIT(GPIO_PORTF_IBE_R,pn);/* trigger is controlled by IEV */
+  	CLEAR_BIT(GPIO_PORTF_IEV_R,pn);/* falling edge trigger */
+
+	SET_BIT(GPIO_PORTF_ICR_R,pn);/* clear any prior interrupt */
+  	SET_BIT(GPIO_PORTF_IM_R,pn);/* unmask interrupt */
+
+
     /* enable interrupt in NVIC and set priority to 3 */
    	NVIC->IP[30] = 3 << 5;     /* set interrupt priority to 3 */
-   	NVIC->ISER[0] |= (1<<30);  /* enable IRQ30 (D30 of ISER[0]) */    
+   	NVIC->ISER[0] |= (1<<30);  /* enable IRQ30 (D30 of ISER[0]) */
+}
+void InterruptE_init(uint8_t pn)
+{
+   	 PN_E = pn;
+
+
+	GPIO_DIO_vidPinInit(GPIO_PORTE,pn);
+	GPIO_vidSetPinDirection(GPIO_PORTE,pn,0);
+	GPIO_vidSetPinPullUpRes(GPIO_PORTE,pn,1);
+	
+
+    /* configure PORTE0, 0 for falling edge trigger interrupt for SW3*/
+	CLEAR_BIT(GPIO_PORTE_IS_R,pn);/* make bit 0 edge sensitive */
+  	CLEAR_BIT(GPIO_PORTE_IBE_R,pn);/* trigger is controlled by IEV */
+  	CLEAR_BIT(GPIO_PORTE_IEV_R,pn);/* falling edge trigger */
+   
+	SET_BIT(GPIO_PORTE_ICR_R,pn);/* clear any prior interrupt */
+  	SET_BIT(GPIO_PORTE_IM_R,pn);/* unmask interrupt */
+
+
+    /* enable interrupt in NVIC and set priority to 3 */
+   	NVIC_PRI1_R = (NVIC_PRI7_R&0xFFFFFF1F)|0x000000E0; // (g) priority 7
+	NVIC_EN0_R = 0x00000010; // (h) enable interrupt 4 in NVIC
 }
 
 
