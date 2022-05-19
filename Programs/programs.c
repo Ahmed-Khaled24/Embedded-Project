@@ -17,9 +17,19 @@ void Buzzer_Init()
     GPIO_vidSetPinDirection(GPIO_PORTB, 3, 1); //output
 
 }
-void Program_Interrupt()
-{
 
+void SW3_Interrupt()
+{
+    systick_Disable();
+     //make the timer stop during pause
+   SET_BIT(GPIO_PORTE_IS_R,0);
+   while(isCooking && ! GPIO_u8GetPinValue(GPIO_PORTE , 0) );   //if in cooking state and door is open  
+      systick_Enable();   
+     CLEAR_BIT(GPIO_PORTE_IS_R,0);
+}
+void SW1_Interrupt()
+{
+    systick_Disable(); //make the timer stop during pause
     while(1) //pause loop
     {
 
@@ -37,14 +47,17 @@ void Program_Interrupt()
 			break;
 		 }
     }
+    systick_Enable();  //enable the dimer because the pause period has ended 
 }
 void Program_A()
 {
 	LCD_vidClearScreen();
      LCD_vidWriteString("Popcorn", strlen("Popcorn")); //display popcorn on LCD
      while(Oven_Ready() == 0) ; //wait until oven is ready (door closed and SW2 pressed)
+     isCooking = 1 ;
      Turn_on_LEDs() ;
      LCD_vidCountDown(100,1); //wait for 1 minute (input entered in format (1:00) which is the standard form
+                                            
 	 Program_Finish() ; //finsihing  program for microwave
 }
 
@@ -53,7 +66,7 @@ void Program_B_or_C(uint8_t key) //this program works for choices B or C
 				
         uint8_t defrost_rate ; //in minutes per kilogram
         uint16_t kilograms = '\0'; //the button entered represents the number of kilograms
-	LCD_vidClearScreen();
+        LCD_vidClearScreen();
 Repeat:  if(key == 'B') //in case keypad button 'B' is pressed ,
         {
             LCD_vidWriteString("Beef Weight?" , strlen("Beef Weight?") ); //then display the beef weight
@@ -75,6 +88,7 @@ Repeat:  if(key == 'B') //in case keypad button 'B' is pressed ,
             LCD_vidWriteChar(kilograms) ; //write the number of kilograms entered
             systick_vidDelay(2000); //2 seconds delay
             while(Oven_Ready() == 0) ; //must wait until door is closed and SW2 is pressed
+            isCooking = 1;
             Turn_on_LEDs() ;
             LCD_vidClearScreen();
             LCD_vidCountDown(defrost_rate * (kilograms-'0'),0); //time to wait in seconds
@@ -83,8 +97,8 @@ Repeat:  if(key == 'B') //in case keypad button 'B' is pressed ,
             LCD_vidClearScreen();
             LCD_vidWriteString("Err", strlen("Err")  );
             systick_vidDelay(2000);
-	    kilograms = '\0';
-	    LCD_vidClearScreen();
+            kilograms = '\0';
+            LCD_vidClearScreen();
             goto Repeat ;
         }
 		Program_Finish() ; //finsihing  program for microwave
@@ -93,10 +107,10 @@ Repeat:  if(key == 'B') //in case keypad button 'B' is pressed ,
 void Program_D() //for other kinds of food
 {
 	
-     uint16_t  timer  ;
-	LCD_vidClearScreen();
-     LCD_vidWriteString("Cooking time?", strlen("Cooking time?") );
-			LCD_vidClearScreen();
+       uint16_t  timer  ;
+	   LCD_vidClearScreen();
+        LCD_vidWriteString("Cooking time?", strlen("Cooking time?") );
+		LCD_vidClearScreen();
     do{
 		LCD_vidClearScreen();
 		LCD_vidWriteString("(1 till 30:00)",strlen("(1 till 30:00)"));
@@ -105,6 +119,7 @@ void Program_D() //for other kinds of food
      if(GPIO_u8GetPinValue(GPIO_PORTF,4) == Low) 
         LCD_vidClearScreen(); //switch 1 pressed to clear LCD
      while(Oven_Ready() == 0) ; //wait until door is closed and switch 2 is pressed then the LEDs are on and the countdown starts
+        isCooking = 1 ;
         Turn_on_LEDs() ;
         LCD_vidCountDown(timer,1)  ; //time is entered in standard form
         Program_Finish() ; //finishing  program for microwave
@@ -113,13 +128,14 @@ void Program_D() //for other kinds of food
 void Program_Finish() //terminating program of the microwave. this is always executed after programs A or B or C or D
 {
     uint8_t i;
+    isCooking = 0;
     LCD_vidClearScreen(); //clear the LCD
-		LCD_vidWriteString("Done",4);
+	LCD_vidWriteString("Done",4);
     Turn_off_LEDs(); //turn off the LEDs
     for(i = 0 ; i < 3 ; i++ )
         {
             Turn_on_LEDs(); //turning the LEDs on and off should make them blink
-	    tuneBuzzer(); //sound the buzzer and wait for 1 second between blinking periods
+	        tuneBuzzer(); //sound the buzzer and wait for 1 second between blinking periods
             Turn_off_LEDs();
             tuneBuzzer(); //sound the buzzer and wait for 1 second between blinking periods
          }
