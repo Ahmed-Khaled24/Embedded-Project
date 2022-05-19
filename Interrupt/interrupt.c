@@ -8,38 +8,35 @@ uint8_t PN;
 void (*F)(void);
 void (*E)(void);
 
-void Interrupt_init(uint8_t pn)
+void InterruptF_init(uint8_t PORT,uint8_t pn)
 {
    	 PN = pn;
 	 
 	
-	GPIO_DIO_vidPinInit(GPIO_PORTF,pn);
-	GPIO_vidSetPinDirection(GPIO_PORTF,pn,0);
-	GPIO_vidSetPinPullUpRes(GPIO_PORTF,pn,1);
+	GPIO_DIO_vidPinInit(PORT,pn);
+	GPIO_vidSetPinDirection(PORT,pn,0);
+	GPIO_vidSetPinPullUpRes(PORT,pn,1);
     
-    /* configure PORTF4, 0 for falling edge trigger interrupt and we will configure also PORTE pin 0 for same conditions for SW3*/
-	CLEAR_BIT(GPIO_PORTF_IS_R,pn);/* make bit 4, 0 edge sensitive */
-  	CLEAR_BIT(GPIO_PORTF_IBE_R,pn);/* trigger is controlled by IEV */
-  	CLEAR_BIT(GPIO_PORTF_IEV_R,pn);/* falling edge trigger */
+    /* configure PORTF4, 0 for falling edge trigger interrupt*/
+	CLEAR_BIT(PORT,pn);/* make bit 4, 0 edge sensitive */
+  	CLEAR_BIT(PORT,pn);/* trigger is controlled by IEV */
+  	CLEAR_BIT(PORT,pn);/* falling edge trigger */
 	
 	
-	SET_BIT(GPIO_PORTF_ICR_R,pn);/* clear any prior interrupt */
-  	SET_BIT(GPIO_PORTF_IM_R,pn);/* unmask interrupt */
+	SET_BIT(PORT,pn);/* clear any prior interrupt */
+  	SET_BIT(PORT,pn);/* unmask interrupt */
   
   
-  
-
     /* enable interrupt in NVIC and set priority to 3 */
    	NVIC->IP[30] = 3 << 5;     /* set interrupt priority to 3 */
-   	NVIC->ISER[0] |= (1<<30);  /* enable IRQ30 (D30 of ISER[0]) */
-
-    
-    
+   	NVIC->ISER[0] |= (1<<30);  /* enable IRQ30 (D30 of ISER[0]) */    
 }
+
+
 
 /* SW1 is connected to PF4 pin, SW2 is connected to PF0.,SW3 connected to PE0 */
 /* Both of them trigger PORTF and PORTE falling edge interrupt */
-//Adding another interrpt for pin E0 for SW3
+//adding interrupt to SW3 for pin0 in PORTE
 void GPIOF_setHandler(void (*f)(void))
 {	
 	F = f;
