@@ -13,7 +13,7 @@ void systick_vid1msDelay(){
 	while((NVIC_ST_CTRL_R&0x00010000)==0) ;
 }
 void systick_Disable(){
-	NVIC_ST_CTRL_R=0;
+	NVIC_ST_CTRL_R &=~0x00000001;
 }//to disable Systick
 
 void systick_Enable(){NVIC_ST_CTRL_R=0x05;}//TO enable Systic
