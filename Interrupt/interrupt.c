@@ -17,7 +17,7 @@ void Interrupt_init(uint8_t pn)
 	GPIO_vidSetPinDirection(GPIO_PORTF,pn,0);
 	GPIO_vidSetPinPullUpRes(GPIO_PORTF,pn,1);
     
-    /* configure PORTF4, 0 for falling edge trigger interrupt */
+    /* configure PORTF4, 0 for falling edge trigger interrupt and we will configure also PORTE pin 0 for same conditions for SW3*/
 	CLEAR_BIT(GPIO_PORTF_IS_R,pn);/* make bit 4, 0 edge sensitive */
   	CLEAR_BIT(GPIO_PORTF_IBE_R,pn);/* trigger is controlled by IEV */
   	CLEAR_BIT(GPIO_PORTF_IEV_R,pn);/* falling edge trigger */
@@ -37,19 +37,26 @@ void Interrupt_init(uint8_t pn)
     
 }
 
-/* SW1 is connected to PF4 pin, SW2 is connected to PF0. */
-/* Both of them trigger PORTF falling edge interrupt */
-//Adding another interrpt for pin f0 for SW3
-void GPIOF_setHandler(void (*f)(void),void (*e)(void))
+/* SW1 is connected to PF4 pin, SW2 is connected to PF0.,SW3 connected to PE0 */
+/* Both of them trigger PORTF and PORTE falling edge interrupt */
+//Adding another interrpt for pin E0 for SW3
+void GPIOF_setHandler(void (*f)(void))
 {	
 	F = f;
+}
+//we make function pointer to make code look more clean
+void GPIOE_setHandler(void (*e)(void))
+{	
 	E = e;
+}
+void GPIOE_Handler(void){
+	E();
+	SET_BIT(GPIO_PORTE_ICR_R,PN);/* clear the interrupt flag */
+
+
 }
 void GPIOF_Handler(void)
 {	
-	if(PN==4){
-	    F();
-	}
-	else if(PN==0){E();}//interrpt function for SW3
+	F();
 	SET_BIT(GPIO_PORTF_ICR_R,PN);/* clear the interrupt flag */
 }
