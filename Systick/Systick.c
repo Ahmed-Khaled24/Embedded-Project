@@ -16,7 +16,7 @@ void systick_Disable(){
 	NVIC_ST_CTRL_R &=~0x00000001;
 }//to disable Systick
 
-void systick_Enable(){NVIC_ST_CTRL_R=0x05;}//TO enable Systic
+void systick_Enable(){NVIC_ST_CTRL_R |=  0x01; }//TO enable Systick
 
 void systick_vid1MicroDelay(){
 	NVIC_ST_RELOAD_R = 16 - 1;
