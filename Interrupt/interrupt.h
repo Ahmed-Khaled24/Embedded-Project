@@ -10,7 +10,7 @@
 
 void InterruptF_init(uint8_t pn);// pin number 0 or 4
 void InterruptE_init(uint8_t pn);// pin number 0
-
+void GPIOE_setHandler(void (*e)(void));
 
 void GPIOF_setHandler(void (*f)(void));
 
