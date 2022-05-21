@@ -3,6 +3,11 @@
 */
 #include "programs.h"
 #include "tm4c123.h"
+
+
+uint8_t isCooking ;
+
+
 void External_Button_Init()
 {
     GPIO_DIO_vidPinInit(GPIO_PORTE , 0);
@@ -29,7 +34,7 @@ void SW3_Interrupt()
 }
 void SW1_Interrupt()
 {
-    systick_Disable(); //make the timer stop during pause
+    //systick_Disable(); //make the timer stop during pause ------------not possible due to the usage of systick inside the function------------------
     while(1) //pause loop
     {
 
@@ -47,7 +52,7 @@ void SW1_Interrupt()
 			break;
 		 }
     }
-    systick_Enable();  //enable the dimer because the pause period has ended 
+    //systick_Enable();  //enable the dimer because the pause period has ended 
 }
 void Program_A()
 {
