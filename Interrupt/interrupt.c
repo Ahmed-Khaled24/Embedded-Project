@@ -50,7 +50,7 @@ void InterruptE_init(uint8_t pn)
   	SET_BIT(GPIO_PORTE_IM_R,pn);/* unmask interrupt */
 
 
-    /* enable interrupt in NVIC and set priority to 3 */
+    /* enable interrupt in NVIC and set priority to 3 */ //---------------------these two lines are written in struct style(not included in course) the course way is used for portE
    	NVIC_PRI1_R = (NVIC_PRI1_R&0xFFFFFF1F)|0x000000E0; // (g) priority 7
 	NVIC_EN0_R = 0x00000010; // (h) enable interrupt 4 in NVIC
 }
