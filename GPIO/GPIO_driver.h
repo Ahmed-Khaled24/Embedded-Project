@@ -62,15 +62,15 @@ void GPIO_vidSetPortValue(uint8_t u8PortNumberCpy, uint8_t u8ValueCpy);// set va
 
 uint8_t GPIO_u8GetPortValue(uint8_t u8PortNumberCpy);// get values of pins of Port
 
-void GPIO_vidActPinAlternateFunction(uint8_t u8PortNumberCpy, uint8_t u8PinNumberCpy, uint8_t u8ValueCpy);
+void GPIO_vidActPinAlternateFunction(uint8_t u8PortNumberCpy, uint8_t u8PinNumberCpy, uint8_t u8ValueCpy);//enable AlternateFunction for a port
 
-void GPIO_vidActPortAlternateFunction(uint8_t u8PortNumberCpy, uint8_t u8ValueCpy);
+void GPIO_vidActPortAlternateFunction(uint8_t u8PortNumberCpy, uint8_t u8ValueCpy);//enable AlternateFunction for a port
 
-void GPIO_vidSetPinDigitalEnable(uint8_t u8PortNumberCpy, uint8_t u8PinNumberCpy, uint8_t u8ValueCpy);
+void GPIO_vidSetPinDigitalEnable(uint8_t u8PortNumberCpy, uint8_t u8PinNumberCpy, uint8_t u8ValueCpy);//enable digital for a pin
 
-void GPIO_vidSetPortDigitalEnable(uint8_t u8PortNumberCpy, uint8_t u8ValueCpy);
+void GPIO_vidSetPortDigitalEnable(uint8_t u8PortNumberCpy, uint8_t u8ValueCpy);//enable digital for a port
 
-void GPIO_vidSetPinAnalogEnable(uint8_t u8PortNumberCpy, uint8_t u8PinNumberCpy, uint8_t u8ValueCpy);
+void GPIO_vidSetPinAnalogEnable(uint8_t u8PortNumberCpy, uint8_t u8PinNumberCpy, uint8_t u8ValueCpy);//enable analog for a pin
 
 void GPIO_vidSetPortAnalogEnable(uint8_t u8PortNumberCpy, uint8_t u8ValueCpy);//activate pull up resistor of port follows previous portFunctions rules
 
@@ -82,15 +82,15 @@ void GPIO_vidSetPinPullDownRes(uint8_t u8PortNumberCpy, uint8_t u8PinNumberCpy, 
 
 void GPIO_vidSetPortPullDownRes(uint8_t u8PortNumberCpy, uint8_t u8ValueCpy);//activate pull Down resistor of port follows previous portFunctions rules
 
-void GPIO_vidClkActivate(uint8_t u8PortNumberCpy,uint8_t u8ValueCpy);
+void GPIO_vidClkActivate(uint8_t u8PortNumberCpy,uint8_t u8ValueCpy);//Activate clock for a certain port
 
-void GPIO_vidSetPortAlternateFunc(uint8_t u8PortNumberCpy,uint8_t u8PCTLValCpy);
+void GPIO_vidSetPortAlternateFunc(uint8_t u8PortNumberCpy,uint8_t u8PCTLValCpy);//set alternate function for a certain port ---the value is 4 bits--- repeates the value along the register
 
-void GPIO_vidSetPinAlternateFunc(uint8_t u8PortNumberCpy,uint8_t u8PinNumberCpy,uint32_t u8PCTLValCpy);
+void GPIO_vidSetPinAlternateFunc(uint8_t u8PortNumberCpy,uint8_t u8PinNumberCpy,uint32_t u8PCTLValCpy);//set alternate function for a certain pin ---the value is 4 bits---
 
-void GPIO_vidUnlockPF0(void);
+void GPIO_vidUnlockPF0(void);//unlock PF0
 
-void GPIO_vidUnlockPD7(void);
+void GPIO_vidUnlockPD7(void);//unlcok PD7
 
 void GPIO_DIO_vidPortInit(uint8_t u8PortNumberCpy);//intialize port
 
