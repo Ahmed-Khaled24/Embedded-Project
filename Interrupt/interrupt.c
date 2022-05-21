@@ -71,7 +71,7 @@ void GPIOE_setHandler(void (*e)(void))
 }
 void GPIOE_Handler(void){
 	E();
-	SET_BIT(GPIO_PORTE_ICR_R,PN);/* clear the interrupt flag */
+	SET_BIT(GPIO_PORTE_ICR_R,PN_E);/* clear the interrupt flag */
 
 
 }
