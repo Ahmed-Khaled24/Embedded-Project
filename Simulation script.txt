@@ -1,0 +1,57 @@
+script:
+
+case 1:
+when you push A
+LCD writes popcorn
+push SW2
+timer counts down 1 minute
+LEDs blink and buzzer sounds
+
+case 2:
+when you push B
+LCD writes Beef Weight?
+you push 3
+push SW2
+timer counts 1.5 minutes
+LEDs blink and buzzer sounds
+
+case 3:
+when you push C
+LCD writes Chicken Weight?
+you push 9
+"explain that SW3 must be always not pushed so that the door is closed and if we press it now the cooking operation won't start "
+push SW2
+timer counts 108 seconds (1 minute 48 seconds) 
+LEDs blink and buzzer sounds
+
+case 4:
+when you push B
+LCD writes Beef Weight?
+you push 0 
+LCD writes "Err" for 2 seconds then asks for valid weight
+push 1
+push SW2
+timer counts 30 seconds
+LEDs blink and buzzer sounds
+
+case 5:
+when you push D
+LCD writes Cooking time?
+you enter "02:00"
+push SW1
+push SW2
+timer counts 2 minutes
+LEDs blink and buzzer sounds
+
+case 6:
+when you push A
+LCD writes popcorn
+pupush SW2
+timer counts down 1 minute
+push SW1 during countdown
+LCD freezes
+push SW2
+LCD continues countdown
+push SW1 
+push SW1 again
+LCD clears and program restarts
