@@ -28,7 +28,7 @@ void InterruptF_init(uint8_t pn)
 
 
     /* enable interrupt in NVIC and set priority to 3 */
-   	NVIC_PRI7_R = (NVIC_PRI7_R&0xFF00FFFF)|0x00A00000; // (g) priority 5
+   	NVIC_PRI7_R |= (NVIC_PRI7_R&0xFF00FFFF)|0x00A00000; // (g) priority 5
 	NVIC_EN0_R = 0x40000000;//for bit 3
 }
 void InterruptE_init(uint8_t pn)
@@ -51,7 +51,7 @@ void InterruptE_init(uint8_t pn)
 
 
     /* enable interrupt in NVIC and set priority to 3 */
-   	NVIC_PRI1_R = (NVIC_PRI1_R&0xFFFFFF1F)|0x000000E0; // (g) priority 7
+   	NVIC_PRI1_R |= (NVIC_PRI1_R&0xFFFFFF1F)|0x000000E0; // (g) priority 7
 	NVIC_EN0_R = 0x00000010; // (h) enable interrupt 4 in NVIC
 }
 
