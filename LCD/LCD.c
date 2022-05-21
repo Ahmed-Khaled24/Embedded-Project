@@ -136,7 +136,7 @@ void LCD_vidCountDown(int16_t timer, uint8_t isStandardForm) {
 	while (min > -1) { 									// keeps looping till the minutes reach 0
 		while (sec > -1) { 								// keeps looping till the seconds reach 0
 			int8_t temp = min;
-			while(GPIO_u8GetPinValue(GPIO_PORTE,0)==0);
+			
 			goToRowColumn(2, 10);						// To count in the bottom-right corner of the screen and keep the already wirtten data unchaged.
 			LCD_vidWriteChar((temp / 10) + '0');
 			LCD_vidWriteChar((temp % 10) + '0');
