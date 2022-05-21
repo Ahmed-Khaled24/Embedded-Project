@@ -10,7 +10,7 @@
 #include "../Keypad/Keypad_configration.h"
 #define BEEF_DEFROST_RATE 30
 #define CHICKEN_DEFROST_RATE 12
-uint8_t isCooking ;
+
 void Buzzer_Init(void); // to intialize the buzzer
 void External_Button_Init(void); // to intialize the push button
 void SW1_Interrupt(void); //for SW1 interrupt conditions
