@@ -35,19 +35,19 @@ int main()
 
 void Stopped_State()
 {
-    if( Keypad_A == 1 ) //if A is pressed go to Cooking State
+    if( Keypad_A == 1 && SW3 == 1) //if A is pressed and door is closed ,go to Cooking State
     {
         state_ptr = Cooking_State ;
         state_ptr() ;
     }
 
-    else if( Keypad_B == 1 || Keypad_C == 1 ) //if B or C is pressed go to weight entry state
+    else if( (Keypad_B == 1 || Keypad_C == 1) && SW3 == 1 ) //if B or C is pressed and door is closed ,go to weight entry state
     {
         state_ptr = Weight_Entry_State ;
         state_ptr() ;
     }
 
-    else if( Keypad_D == 1) //if D is pressed go to time entry state
+    else if( Keypad_D == 1 && SW3 == 1) //if D is pressed and door is closed ,go to time entry state
     {
         state_ptr = Time_Entry_State ;
         state_ptr() ;
@@ -67,7 +67,7 @@ void  Cooking_State()
         state_ptr() ;
     }
 
-    else if(SW1 == 1 || SW3 ==1) //if switch 1 or 3 are pressed ,  go to pause state
+    else if(SW1 == 0 || SW3 == 0 ) //if switch 1 or 3 are pressed ,  go to pause state
     {
         state_ptr = Pause_State ;
         state_ptr() ;
@@ -82,17 +82,17 @@ void  Cooking_State()
 
 void  Pause_State()
 {
-    if(SW1 == 1 )  //if switch 1 is pressed ,  go to stopped state
+    if(SW1 == 0 )  //if switch 1 is pressed ,  go to stopped state
     {
         state_ptr = Stopped_State;
         state_ptr() ;
     }
-    else if( SW2 == 1 ) //if switch 1 is pressed ,  go to cooking state
+    else if( SW2 == 0 || SW3 == 1) //if switch 1 is pressed ,  go to cooking state
     {
         state_ptr = Cooking_State;
         state_ptr() ;
     }
-     else //otherwise , stay in the current state
+    else //otherwise , stay in the current state
      {
         state_ptr() ;
      }
@@ -100,12 +100,12 @@ void  Pause_State()
 
 void Weight_Entry_State()
 {
-    if(SW1 == 1) //if SW1 is pressed (interrupt) go to pause state
+    if(SW1 == 0) //if SW1 is pressed (interrupt) go to pause state
     {
         state_ptr = Pause_State();
         state_ptr();
     }
-    else if(Illegal_Weight == 0) //if the weight is entered correctly go to cooking state
+    else if(Illegal_Weight == 0 && SW3 == 1) //if the weight is entered correctly and door is closed , go to cooking state
     {
         state_ptr = Cooking_State ;
         state_ptr() ;
@@ -119,12 +119,12 @@ void Weight_Entry_State()
 
 void  Time_Entry_State()
 {
-    if(SW1 == 1) //if SW1 is pressed (interrupt) go to pause state
+    if(SW1 == 0) //if SW1 is pressed (interrupt) go to pause state
     {
         state_ptr = Pause_State();
         state_ptr();
     }
-    else if(SW2 == 1 ) //if SW2 is pressed  go to cooking state
+    else if(SW2 == 0 && SW3 == 1 ) //if SW2 is pressed and door is closed , go to cooking state
     {
         state_ptr = Cooking_State ;
         state_ptr() ;
