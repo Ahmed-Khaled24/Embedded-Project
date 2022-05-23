@@ -8,7 +8,8 @@
 //five functions to represent the five states of the microwave oven
 void Stopped_State();
 void  Cooking_State();
-void  Pause_State();
+void  SW1_Pause_State();
+void SW3_Pause_State();
 void Weight_Entry_State();
 void  Time_Entry_State();
 /* the global variables representing the state transitions.
@@ -18,7 +19,7 @@ void  Time_Entry_State();
  SW1,2,3 represent the three switches
  time_left represents timer
 */
-volatile uint8_t Keypad_A , Keypad_B, Keypad_C , Keypad_D , Illegal_Weight , SW1 , SW2 , SW3 , time_left ;
+volatile uint8_t Keypad_A , Keypad_B, Keypad_C , Keypad_D , Illegal_Weight ,Illegal_Time, SW1 , SW2 , SW3 , time_left ;
 //function pointer to point to current state function , initialy is the stopped state
 void (*state_ptr)() = Stopped_State ;
 
@@ -67,12 +68,16 @@ void  Cooking_State()
         state_ptr() ;
     }
 
-    else if(SW1 == 0 || SW3 == 0 ) //if switch 1 or 3 are pressed ,  go to pause state
+    else if(SW1 == 0  ) //if switch 1 is pressed ,  go to SW1 pause state
     {
-        state_ptr = Pause_State ;
+        state_ptr = SW1_Pause_State ;
         state_ptr() ;
     }
-
+    else if(SW 3 == 0 ) //if switch 3 is pressed (door open) ,  go to SW3 pause state
+    {
+        state_ptr = SW3_Pause_State ;
+        state_ptr() ;
+    }
     else //otherwise , stay in the current state
     {
         state_ptr() ;
@@ -80,14 +85,15 @@ void  Cooking_State()
 
 }
 
-void  Pause_State()
+void  SW1_Pause_State()
 {
+    
     if(SW1 == 0 )  //if switch 1 is pressed ,  go to stopped state
     {
         state_ptr = Stopped_State;
         state_ptr() ;
     }
-    else if( SW2 == 0 || SW3 == 1) //if switch 1 is pressed ,  go to cooking state
+    else if( SW2 == 0 ) //if switch 2  is pressed   go to cooking state
     {
         state_ptr = Cooking_State;
         state_ptr() ;
@@ -97,12 +103,23 @@ void  Pause_State()
         state_ptr() ;
      }
 }
-
+void SW3_Pause_State()
+{
+     if(SW3 == 1) //if door is closed , go to cooking state 
+     {
+        state_ptr = Cooking_State;
+        state_ptr() ;
+     }
+     else //otherwise , stay in the current state
+     {
+          state_ptr() ;
+     }
+}
 void Weight_Entry_State()
 {
     if(SW1 == 0) //if SW1 is pressed (interrupt) go to pause state
     {
-        state_ptr = Pause_State();
+        state_ptr = SW1_Pause_State();
         state_ptr();
     }
     else if(Illegal_Weight == 0 && SW3 == 1) //if the weight is entered correctly and door is closed , go to cooking state
@@ -121,10 +138,10 @@ void  Time_Entry_State()
 {
     if(SW1 == 0) //if SW1 is pressed (interrupt) go to pause state
     {
-        state_ptr = Pause_State();
+        state_ptr = SW1_Pause_State();
         state_ptr();
     }
-    else if(SW2 == 0 && SW3 == 1 ) //if SW2 is pressed and door is closed , go to cooking state
+     else if(Illegal_Time == 1 && SW2 == 0 && SW3 == 1 ) //if SW2 is pressed and door is closed , go to cooking state
     {
         state_ptr = Cooking_State ;
         state_ptr() ;
