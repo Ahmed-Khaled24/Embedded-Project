@@ -30,7 +30,7 @@ void InterruptF_init(uint8_t pn)
     /* enable interrupt in NVIC and set priority to 3 */
    	NVIC_PRI7_R |= (NVIC_PRI7_R&0xFF00FFFF)|0x00A00000; // (g) priority 5
 	NVIC_EN0_R = 0x40000000;//for bit 3
-	//__enable_irq(); is used to enable the interrupts on the processor but it is activated by default so there is no need to add it
+	__enable_irq(); //is used to enable the interrupts on the processor t
 }
 void InterruptE_init(uint8_t pn)
 {
