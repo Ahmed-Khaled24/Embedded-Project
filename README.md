@@ -1,11 +1,13 @@
-## Contributors
+## Project describtion:
+This project simulates the embedded controller in a microwave oven, with all the drivers bulit from scratch ( LCD, Keypad, GPIO, Timers ).
+ 
+## Components:
+1. LCD 1602a.
+2. Keypad 4x4.
+3. Tiva-c tmc4h123gh6pm microcontroller.
+4. External push buttons.
 
-| Name | ID |
-|------|----|
-| Ahmed Khaled Mohamed Azab | 1901275 | 
-| Omar Mohamed Fahmy | 1901299 |
-| Malek Abdelrhman Hassan Ali | 1901104 |
-| Philopateer Moheb Fouad Barsoum | 1901202 |
-| Ghaith Bassam Zaza | 1901458 |
-| Mina Mounir Farid Gendi | 1901384 |
+---
 
+### [Project full description](https://drive.google.com/file/d/1yWBFqaDdQr_cKDoms5WSqnZIQ1EwHfVg/view?usp=sharing)
+### [Demo video](https://drive.google.com/file/d/1348P2kQW6XYCVv4F4vgjFTVRXCwgQW0M/view?usp=sharing)
